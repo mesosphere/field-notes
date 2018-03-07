@@ -1,3 +1,10 @@
-# Field Notes
+---
+title: Field Notes
+---
 
-This is a space for publishing findings and best practices from the field.
+# Field Tech Team Notes
+
+
+### Stuff
+
+* This is the start of the field-notes documentation site, for findings and best practices.
