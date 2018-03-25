@@ -2,12 +2,13 @@
 
 ## CPU Behavior
 
-Between 1.9 and 1.10, Mesosphere changed the default behavior for containers run with the Docker runtime.  Specifically, in 1.10, containers run with the Docker runtime now respect the `MESOS_CGROUPS_ENABLE_CFS` flag, which defaults to true.  This means that by default in `1.10.x` and above, containers run with the Docker containerizer will be hard limited to their specified allocation.
+During the upgrade from DC/OS 1.9 and 1.10, Mesosphere changed the default behavior for containers run with the Docker runtime.  Specifically, in 1.10, containers run with the Docker runtime now respect the `MESOS_CGROUPS_ENABLE_CFS` flag, which defaults to true.  This means that by default in `1.10.x` and above, containers run with the Docker containerizer will be hard limited to their specified allocation.
 
 | DC/OS Version | Mesos Containerizer Default Behavior | Docker Default Behavior |
 | ---------------| ------------------------------------ | ----------------------- |
 | 1.9 | Hard CPU Limit | Soft CPU Limit |
 | 1.10 | Hard CPU Limit | Hard CPU Limit |
+
 
 * Hard CPU Limit: Containers will be prevented from using more CPU than specified in their allocation.
 * Soft CPU Limit: Containers will be allowed to use more CPU than specified in their allocation.
@@ -17,9 +18,11 @@ In 1.10 and above, in order to revert to soft limits, you can do the following:
 
 * Create and/or edit the `/var/lib/dcos/mesos-slave-common` file on an agent
 * Add this line: 
-```
-MESOS_CGROUPS_ENABLE_CFS=false
-```
+
+    ```
+    MESOS_CGROUPS_ENABLE_CFS=false
+    ```
+
 * Restart the Mesos slave.  This will not result in a new Mesos agent ID.
 
 *This will apply to both the Docker containerizer and the Mesos containerizer*

@@ -7,8 +7,10 @@ This is an unofficial document, put together by members of the DC/OS community, 
     * [Simple Multi-Master DC/OS Installation Walkthrough](walkthroughs/multi-master-setup.md)
     * [DC/OS Custom Universe](walkthroughs/custom-universe.md)
 
+
 * Troubleshooting
     * [Installation FAQ](troubleshooting/installation-faq.md)
+
 
 * FAQs / How Tos
     * [Frequently Asked Questions](faqs/faq.md)
@@ -18,6 +20,11 @@ This is an unofficial document, put together by members of the DC/OS community, 
     * [DC/OS Certificates for Dummies](faqs/certificates-for-dummies.md)
     * [Simple Python Batch Jobs](faqs/simple-python-batch-jobs.md)
 
+
 * Spark Stuff
     * [Spark Notes](spark/spark.md)
     * [Spark Env Setup](spark/env.md)
+
+* Other
+    * [Multi-Tenant Resource Isolation](docs/multitenant-resource-isolation.md)
+    * [Migrating Masters to New IPs](docs/master-replacement.md)
