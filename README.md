@@ -1,1 +1,1 @@
-# Test
+All content is in the `/docs` folder.  Anything not in `/docs` will not be published.
