@@ -4,5 +4,5 @@ author: Justin Lee
 # email: jlee@mesosphere.com
 
 
-theme: jekyll-theme-cayman
+theme: minima
 markdown: kramdown
