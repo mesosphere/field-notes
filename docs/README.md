@@ -2,7 +2,6 @@
 
 This is an unofficial document, put together by members of the DC/OS community, to assist in the usage of DC/OS (Open Source and Enterprise Editions)
 
-* [Introduction](README.md)
 * Walkthroughs
     * [Simple Single-Master DC/OS Installation Walkthrough](walkthroughs/single-master-setup.md)
     * [Simple Multi-Master DC/OS Installation Walkthrough](walkthroughs/multi-master-setup.md)
