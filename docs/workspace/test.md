@@ -22,3 +22,9 @@ def show
   end
 end
 {% endhighlight %}
+
+JSON?
+
+{% highlight json %}
+{"type":"RESERVE_RESOURCES","reserve_resources":{"agent_id":{"value":"0ab83533-b525-42de-877c-a2f6ce9751f3-S2"},"resources":[{"name":"ports","type":"RANGES","ranges":{"range":[{"begin":1025,"end":2180},{"begin":2182,"end":3887},{"begin":3889,"end":5049},{"begin":5052,"end":8079},{"begin":8082,"end":8180},{"begin":8182,"end":32000}]},"reservation":{"principal":"admin"},"role":"prod"},{"name":"disk","type":"SCALAR","scalar":{"value":51042},"role":"prod","reservation":{"principal":"admin"},"disk":{"source":{"type":"MOUNT","mount":{"root":"/dcos/volume0"}}}},{"name":"disk","type":"SCALAR","role":"prod","reservation":{"principal":"admin"},"scalar":{"value":51042}},{"type":"SCALAR","name":"cpus","reservation":{"principal":"admin"},"role":"prod","scalar":{"value":4}},{"type":"SCALAR","name":"mem","reservation":{"principal":"admin"},"role":"prod","scalar":{"value":14605}}]}}
+{% endhighlight %}
