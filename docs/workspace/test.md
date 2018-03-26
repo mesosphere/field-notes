@@ -16,9 +16,19 @@ Other more stuff
 
 ## _formatted_ **heading** with [a](link)
 
----
+```
 {{standard 3-backtick code block omitted from here due to escaping issues}}
----
+```
+
+{% highlight ruby linenos %}
+def show
+  @widget = Widget(params[:id])
+  respond_to do |format|
+    format.html # show.html.erb
+    format.json { render json: @widget }
+  end
+end
+{% endhighlight %}
 
 Collapsible until here.
 </p></details>
