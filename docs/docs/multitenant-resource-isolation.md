@@ -94,55 +94,98 @@ In the DC/OS Catalog, there is a package called "Marathon"; this can be used to 
 
 One MoM is up and running, you can access the Marathon interface by clicking on the "Open Service" link next to the service, or by navigating to `https://<dcos-url>/services/marathon-prod`.
 
+#### Installing MoM
+
 In addition to the OSS MoM, DC/OS users who have an enterprise license with Mesosphere can use the Enterprise Edition of Marathon-on-Marathon, which adds the following capabilities:
 * Support for DC/OS EE Strict Mode
 * Support for DC/OS Secrets
 * Support for DC/OS ACL Control
 
-#### Configuring Access to MoM
+#### Installing Enterprise MoM
 
-* WIP
+* **TODO**
+
+#### Configuring Access to Enterprise MoM
+
+* **TODO**
+
+#### Configuring Access within Enterprise MoM
 
 ### Splitting up Cluster Resources
 There are several options available to us now (in DC/OS 1.10.x and 1.11.x, which correspond to Apache Mesos 1.4.x and 1.5.x, respectively):
 
-* **Static Reservations**: Resources on a given cluster node can be hard-coded to be reserved for a given role.  Changing this requires essentially wiping the node.
+* **Static Reservations**: Resources on a given cluster node can be hard-coded to be reserved for a given role.  Changing this requires essentially **TODO**ing the node.
     * For example, on a given bare-metal node, we could hard-code that all of its resources are reserved for `prod` workloads.
+
+    Configuring Static Reservations: **TODO**
 
 * **Dynamic Reservations**: Resources on a given cluster node can, during runtime, be configured to be reserved for a given role.  Changing this is achieved by the Mesos Operator API.
     * For example, if we know that we have some large `prod` workload coming up that will require a specific type of resources, we could dynamically reserve resources on a set of certain nodes to be reserved for `prod` workloads.
     * Alternately, we could use the dynamic reservation operator API to reserve a set of resources on a given node on an essentially persistent basis.
 
+    Configuring Dynamic Reservations: **TODO**
+
 * **Quotas**: A set of resources cluster-wide can be reserved for a given role.  
     * For example, assume we have 20 nodes, each with 10 CPU cores and 256 GB of memory (200 cores and 5 TB of memory).  If we want to ensure that `prod` workloads are not affected by other workloads (such as `dev` or `test`), we could set a 'quota' of 100 cores and 2560 GB of memory for the `prod` role.
-    * *Of note: a quota is also currently a limit; if you set a quota of 100 cores and 2560 GB of memory for a given role, that role will be guaranteed that amount of resources, but it will also **only** be allowed to use that amount of resources.*
+    * *Of note: a quota is also currently a limit; if you set a quota of 100 cores and 2560 GB of memory for a given role, that role will be guaranteed that amount of resources, but it will also **only** be allowed to use that amount of resources.  From the (documentation)[http://mesos.apache.org/documentation/latest/quota/], `NOTE: Currently quota guarantee also serves as quota limit, i.e. once quota for the role is satisfied, no further resources will be offered to the role except those reserved for the role. This behavior aims to mitigate the absence of quota limit and will be changed in future releases.`*
+    * *Additionally of note: quotas cannot currently be updated; they must be removed and reinstated, with separate API queries.  During the interval between the API queries, the framework may exceed its quota limit.*
 
-### Currently Unsupported Features
+    Configuring Quotas:  **TODO**
 
-* WIP
+### Current Limitations
+
+There are many features that are potentially on the roadmap for DC/OS and Apache Mesos.  This is a non-authoritative and non-exhaustive list of features that *may* come in the future.
+
+Please contact Mesosphere for official roadmap and release timeline.
+
+#### Multi-role frameworks
+
+Currently, Mesos frameworks can be configured to support multiple roles.  For example, framework `X` could be designed to support roles `A` and `B`.  Unfortunately, Marathon (the primary framework used in DC/OS) does not yet support multiple roles.  See JIRA (Marathon-2775)[https://jira.mesosphere.com/browse/MARATHON-2775].
 
 #### Quota Minimums and Maximums
-#### Hierarchical Roles
+
+Currently, Apache Mesos enforces a quota as both a minimum and a maximum.  For example, if role `prod` is configured with a quota of 100 CPU cores, then `prod` will experience two behaviors:
+
+* `prod` will always be guaranteed 100 CPU cores
+* `prod` will never be able to use more than 100 CPU cores
+
+In the future, these may be configurable on a separate basis.  For example, for a given role `X`, we could set a guarantee of 100 CPU cores and a limit of 200 CPU cores.
+
+#### Hierarchical Reservations
+
+Apache Mesos currently supports hierarchical roles (i.e., refinement of a portion of a given reservation for role `X` into reservations for children roles `X/A` and `X/B`).  However, this currently has limited value; in the DC/OS sphere is currently utilized only by the Kubernetes and Edge-LB Catalog services (which are built on the SDK).  More importantly, *Marathon does not currently support hierarchical roles.*
+
 #### Hierarchical Quotas
+
+In addition to the above limitation regarding Framework support of hierarchical roles, quotas cannot currently be assigned to hierarchical roles.
+
 #### Multi-role reservations
+
+In the future, it may be possible to configure a given reservation such that it supports multiple roles.  This may take one or more of several forms, which have not yet been fully defined:
+
+* The ability to configure a set of resources such that they be may consumed by any role in a specified set.  For example, a set of resources that could be used by either the `dev` or `test` roles.
+* The ability to configure a set of resources such that they may be consumed by either a role `X` or its child (hiearchical) role `X/A`.  For example, a set of resources that could be consumed by either the parent `prod` or child `prod/usa` role.
+
 #### Revocable Reservation
+
+In the future, Apache Mesos may support a set of quotas and/or reservations for a set of roles such that resources currently in use for one role may be pre-empted or revoked by another role.  For example, a task using the `dev` may be paused and/or killed in favor of a higher-priority `prod` role.
 
 ## Spark
 
-* WIP
+* **TODO**
 
 ## Load Balancing / Ingress
 
-* WIP
+* **TODO**
 
 ### Marathon-LB
 
-* WIP
+* **TODO**
 
 ### Edge-LB
 
-* WIP
+* **TODO**
 
 ## Example: MoM + Dynamic Reservations + Quotas + Edge-LB
 
-* WIP
+* **TODO**
