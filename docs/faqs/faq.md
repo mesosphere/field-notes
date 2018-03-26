@@ -1,3 +1,6 @@
+---
+---
+
 # FAQs
 
 This page is a generic list of how-to's and FAQs for DC/OS.

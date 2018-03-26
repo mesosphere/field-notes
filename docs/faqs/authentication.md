@@ -1,3 +1,6 @@
+---
+---
+
 # Overview
 
 This document details a couple different methods for authenticating with DC/OS EE, without the DC/OS cli tool.

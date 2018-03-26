@@ -1,3 +1,6 @@
+---
+---
+
 ## This document includes code snippets to set up various parts of the DC/OS Spark environment
 
 # Set up hdfs (based on dc/os hdfs package), and configure command line access to hdfs from a node in your cluster

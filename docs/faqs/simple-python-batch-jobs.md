@@ -1,3 +1,6 @@
+---
+---
+
 # Simple Batch Jobs
 
 This document describes three different ways to run simple python batch jobs on a DC/OS cluster.  This is non-complete and is meant more as a simple introduction.  These are the mechanisms demonstrated:

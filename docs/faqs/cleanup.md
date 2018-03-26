@@ -1,3 +1,6 @@
+---
+---
+
 # Framework Cleanup
 
 When a framework (such as Spark / Elastic) is removed from DC/OS by clicking the `Destroy` button in the DC/OS Services UI, it tends to leave a lot of stuff hanging around in DC/OS.  You may notice that if you destroy a service and re-create it, it will either (a) have stuff left over from previous deployments or (b) will refuse to properly start up.

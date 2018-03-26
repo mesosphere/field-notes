@@ -1,3 +1,6 @@
+---
+---
+
 # Master Replacement
 
 **The steps outlined in this guide are theoretically only.  Changing the IP addresses of the masters in a DC/OS cluster configured with static masters is not supported.**

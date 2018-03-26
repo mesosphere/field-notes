@@ -1,3 +1,6 @@
+---
+---
+
 # DC/OS Multi-tenant Resource Isolation in DC/OS 1.10 and 1.11
 
 ## Purpose
