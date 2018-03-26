@@ -1,5 +1,4 @@
 ---
-
 ---
 
 # DC/OS Notes, Comments, and Walkthroughs
