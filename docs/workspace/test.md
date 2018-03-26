@@ -16,7 +16,7 @@ Other more stuff
 
 ## _formatted_ **heading** with [a](link)
 
-{% highlight ruby lineos %}
+{% highlight ruby linenos %}
 def show
   @widget = Widget(params[:id])
   respond_to do |format|
@@ -26,15 +26,11 @@ def show
 end
 {% endhighlight %}
 
-```
-{{standard 3-backtick code block omitted from here due to escaping issues}}
-```
-
 Collapsible until here.
 </details>
 
 Code snippet example:
-{% highlight ruby lineos %}
+{% highlight ruby linenos %}
 def show
   @widget = Widget(params[:id])
   respond_to do |format|
