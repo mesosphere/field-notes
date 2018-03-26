@@ -9,10 +9,6 @@
     <meta name="theme-color" content="#157878">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>$('.h2,h3,h4,h5,h6').filter('[id]').each(function () {
-      $(this).html('<a href="#'+$(this).attr('id')+'">' + $(this).text() + '</a>');
-  });</script>
   </head>
   <body>
     <section class="page-header">
@@ -36,5 +32,9 @@
         {% endif %}
       </footer>
     </section>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>$('.h2,h3,h4,h5,h6').filter('[id]').each(function () {
+      $(this).html('<a href="#'+$(this).attr('id')+'">' + $(this).text() + '</a>');
+  });</script>
   </body>
 </html>
