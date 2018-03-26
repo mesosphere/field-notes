@@ -181,13 +181,17 @@ In the future, Apache Mesos may support a set of quotas and/or reservations for 
 
 ## Load Balancing / Ingress
 
+In addition to the above discussion about configuring resource allocation for services and tasks running in DC/OS, services often also have to be exposed to end-users.  In a microservices architecture, automatic service discovery is important to provide a consistent endpoint for users and clients to access.
+
+In DC/OS, there are two primary ingress mechanisms:
+
+* Marathon-LB, which is haproxy with configurations automatically configured
+
+### Configuring Marathon-LB with MoM
+
 **TODO**
 
-### Marathon-LB
-
-**TODO**
-
-### Edge-LB
+### Configuring Edge-LB with MoM
 
 **TODO**
 
