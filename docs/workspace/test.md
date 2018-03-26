@@ -12,14 +12,14 @@ More stuff
 
 Other more stuff
 
-<details><summary>stuff with *mark* **down**</summary>
+<details><summary>stuff with *mark* **down**</summary><p>
 
 ## _formatted_ **heading** with [a](link)
 
 stuff doesn't work
 
 Collapsible until here.
-</details>
+</p></details>
 
 Code snippet example:
 {% highlight ruby linenos %}
