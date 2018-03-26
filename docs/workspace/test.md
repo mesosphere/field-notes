@@ -12,7 +12,7 @@ More stuff
 
 Other more stuff
 
-<details><summary>stuff with *mark* **down**</summary><p>
+<details><summary>stuff with *mark* **down**</summary>
 
 ## _formatted_ **heading** with [a](link)
 
@@ -21,7 +21,7 @@ Other more stuff
 ```
 
 Collapsible until here.
-</p></details>
+</details>
 
 Code snippet example:
 {% highlight ruby lineos %}
