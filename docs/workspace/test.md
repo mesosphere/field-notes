@@ -16,15 +16,7 @@ Other more stuff
 
 ## _formatted_ **heading** with [a](link)
 
-{% highlight ruby linenos %}
-def show
-  @widget = Widget(params[:id])
-  respond_to do |format|
-    format.html # show.html.erb
-    format.json { render json: @widget }
-  end
-end
-{% endhighlight %}
+stuff doesn't work
 
 Collapsible until here.
 </details>
