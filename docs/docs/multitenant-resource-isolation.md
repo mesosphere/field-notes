@@ -104,13 +104,15 @@ In addition to the OSS MoM, DC/OS users who have an enterprise license with Meso
 * Support for DC/OS Secrets
 * Support for DC/OS ACL Control
 
+**TODO**
+
 #### Installing Enterprise MoM
 
-* **TODO**
+**TODO**
 
 #### Configuring Access to Enterprise MoM
 
-* **TODO**
+**TODO**
 
 #### Configuring Access within Enterprise MoM
 
@@ -173,22 +175,22 @@ In the future, it may be possible to configure a given reservation such that it 
 
 In the future, Apache Mesos may support a set of quotas and/or reservations for a set of roles such that resources currently in use for one role may be pre-empted or revoked by another role.  For example, a task using the `dev` may be paused and/or killed in favor of a higher-priority `prod` role.
 
-## Spark
+<!-- ## Spark -->
 
-* **TODO**
+<!-- **TODO** -->
 
 ## Load Balancing / Ingress
 
-* **TODO**
+**TODO**
 
 ### Marathon-LB
 
-* **TODO**
+**TODO**
 
 ### Edge-LB
 
-* **TODO**
+**TODO**
 
 ## Example: MoM + Dynamic Reservations + Quotas + Edge-LB
 
-* **TODO**
+**TODO**
