@@ -3,6 +3,8 @@ description: Unofficial notes from using DC/OS in the field.
 author: Justin Lee
 # email: jlee@mesosphere.com
 
-
 theme: jekyll-theme-cayman
 markdown: kramdown
+
+collections:
+  faqs:
