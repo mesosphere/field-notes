@@ -128,7 +128,7 @@ Optionally, make these modifications:
 
 Use it to install the latest version of MoM, using this command:
 
-{ % highlight terminal %}
+{% highlight terminal %}
 dcos package install marathon --options=mom.json
 {% endhighlight %}
 
