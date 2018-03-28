@@ -7,8 +7,6 @@
 This document details various options available in DC/OS 1.10.x and 1.11.x to support isolating multiple tenant's workloads on a single DC/OS cluster.
 Note that the general theme of the 1.12 is "Multi-tenancy", so all of this is subject to change  in 1.12.  More specifically, many new options regarding this topic may become available.
 
--------
-
 ## Background
 
 ### Apache Mesos
@@ -79,11 +77,9 @@ For example, if a cluster the following:
 
 Then we could specify that app `/baremetal-app` must always run on a baremetal node, but there's no (simple) way to reserve the expensive baremetal for only a certain class of apps with the core Marathon, or the ensure that other applications or users stay on the virtual machine nodes.
 
--------
-
 ## Resource Isolation - Multiple Frameworks
 
-So how do we ensure that certain workloads (for example, prod), are guaranteed a certain set of resources?  At a high level, there are a two tools we can combine to achieve this:
+So how do we ensure that certain workloads (for example, prod), are guaranteed a certain set of resources?  At a high level, there are a couple tools we can combine to achieve this:
 
 * Split workloads onto multiple frameworks.  This is achieved by starting additional Marathon instances (in DC/OS parlance, this is known as "Marathon on Marathon", because the actual framework process runs as a child task of the root Marathon.
 
@@ -107,8 +103,36 @@ In addition to the OSS MoM, DC/OS users who have an enterprise license with Meso
 * Support for DC/OS ACL Control
 
 #### Installing OSS Marathon-on-Marathon
+<details><summary>Click to Expand</summary><p>
+Create a JSON file mom.json, with at least these parameters:
+{% highlight terminal %}
+{
+  "service": {
+    "name": "marathon-dev"
+  },
+  "marathon": {
+    "default-accepted-resource-roles": "dev,*",
+    "framework-name": "marathon-dev",
+    "mesos-role": "dev",
+    "mesos-user": "marathon-dev-principal"
+  }
+}
+{% endhighlight %}
 
-Use the directions [here](multitenant-resource-isolation-instructions.md#installing-oss-marathon-on-marathon) to install a Marathon-on-Marathon instance.
+Optionally, make these modifications:
+<ul>
+<li>Replace 'dev' with the correct role (e.g., 'prod')</li>
+<li>If you want the MoM instance to only be able to use resources <b>reserved</b> for your role, specify "dev" (or your correct role).</li>
+<li>If you want the MoM instance to also be able to use <b>unreserved</b> resources (in addition to being able to use <b>reserved</b> resources), specify "dev,*" (or your correct role and '*', comma separated).</li>
+</ul>
+
+Use it to install the latest version of MoM, using this command:
+
+{% highlight terminal %}
+dcos package install marathon --options=mom.json --yes
+{% endhighlight %}
+
+</p></details>
 
 #### Installing Enterprise MoM
 
@@ -132,23 +156,32 @@ There are several options available to us now (in DC/OS 1.10.x and 1.11.x, which
     * For example, on a given bare-metal node, we could hard-code that all of its resources are reserved for `prod` workloads.
 
     * Static reservations can be configured in two ways:
-        * Reserve all of the resources on a given node for a given role.  Instructions [here]()
+        * Reserve all of the resources on a given node for a given role
         * Create one or more reservations on a given node for specific roles, and leave the rest unreserved
 
-    Use the directions [here](multitenant-resource-isolation-instructions.md#) to install configure static reservations
+    <details><summary>Reserving a whole node for a specific role</summary><p>
+    <ol>
+    <li>On the designated node, create a file with the filename <b>/var/lib/dcos/mesos-slave-common</b> if it does not already exist</li>
+    <li>On the designated node, create a file with the filename <b>/var/lib/dcos/mesos-slave-common</b> if it does not already exist</li>
+    </p></details>
+
+
+    <details><summary>Create one or more reservations on a given node for specific roles</summary><p>
+
+    </p></details>
 
 * **Dynamic Reservations**: Resources on a given cluster node can, during runtime, be configured to be reserved for a given role.  Changing this is achieved by the Mesos Operator API.
     * For example, if we know that we have some large `prod` workload coming up that will require a specific type of resources, we could dynamically reserve resources on a set of certain nodes to be reserved for `prod` workloads.
     * Alternately, we could use the dynamic reservation operator API to reserve a set of resources on a given node on an essentially persistent basis.
 
-    Use the directions [here](multitenant-resource-isolation-instructions.md#) to install configure dynamic reservations
+    Configuring Dynamic Reservations: **TODO**
 
 * **Quotas**: A set of resources cluster-wide can be reserved for a given role.  
     * For example, assume we have 20 nodes, each with 10 CPU cores and 256 GB of memory (200 cores and 5 TB of memory).  If we want to ensure that `prod` workloads are not affected by other workloads (such as `dev` or `test`), we could set a 'quota' of 100 cores and 2560 GB of memory for the `prod` role.
     * *Of note: a quota is also currently a limit; if you set a quota of 100 cores and 2560 GB of memory for a given role, that role will be guaranteed that amount of resources, but it will also **only** be allowed to use that amount of resources.  From the (documentation)[http://mesos.apache.org/documentation/latest/quota/], `NOTE: Currently quota guarantee also serves as quota limit, i.e. once quota for the role is satisfied, no further resources will be offered to the role except those reserved for the role. This behavior aims to mitigate the absence of quota limit and will be changed in future releases.`*
     * *Additionally of note: quotas cannot currently be updated; they must be removed and reinstated, with separate API queries.  During the interval between the API queries, the framework may exceed its quota limit.*
 
-    Use the directions [here](multitenant-resource-isolation-instructions.md#) to install configure quotas
+    Configuring Quotas:  **TODO**
 
 ### Current Limitations
 
@@ -192,8 +225,6 @@ In the future, Apache Mesos may support a set of quotas and/or reservations for 
 
 <!-- **TODO** -->
 
--------
-
 ## Load Balancing / Ingress
 
 In addition to the above discussion about configuring resource allocation for services and tasks running in DC/OS, services often also have to be exposed to end-users.  In a microservices architecture, automatic service discovery is important to provide a consistent endpoint for users and clients to access.
@@ -219,8 +250,12 @@ Here are the key differences (there are many others):
 
 ### Configuring Marathon-LB with MoM
 
-Use the directions [here](multitenant-resource-isolation-instructions.md#) to install configure Marathon-LB to work with MoM
+**TODO**
 
 ### Configuring Edge-LB with MoM
 
-Use the directions [here](multitenant-resource-isolation-instructions.md#) to install configure Edge-LB to work with MoM
+**TODO**
+
+## Example: MoM + Dynamic Reservations + Quotas + Edge-LB
+
+**TODO**
