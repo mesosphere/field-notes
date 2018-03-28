@@ -1,7 +1,7 @@
 ---
 ---
 
-### Installing OSS Marathon-on-Marathon
+### OSS Marathon-on-Marathon
 Create a JSON file mom.json, with at least these parameters:
 
 ```json
@@ -29,10 +29,20 @@ Use it to install the latest version of MoM, using this command:
 dcos package install marathon --options=mom.json --yes
 ```
 
-### Static Reservations: Reserve all of the resources on a given node for a given role
-
+### Static Reservations: Full Node
 * TODO
 
-### Static Reservations: Create one or more reservations on a given node for specific roles
+### Static Reservations: Partial Node
+* TODO
 
+### Dynamic Reservations
+* TODO
+
+### Configuring Quotas
+* TODO
+
+### Configuring Marathon-LB with MoM
+* TODO
+
+### Configuring Edge-LB with MoM
 * TODO
