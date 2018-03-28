@@ -97,18 +97,46 @@ In the DC/OS Catalog, there is a package called "Marathon"; this can be used to 
 
 One MoM is up and running, you can access the Marathon interface by clicking on the "Open Service" link next to the service, or by navigating to `https://<dcos-url>/services/marathon-prod`.
 
-#### Installing MoM
-
 In addition to the OSS MoM, DC/OS users who have an enterprise license with Mesosphere can use the Enterprise Edition of Marathon-on-Marathon, which adds the following capabilities:
 * Support for DC/OS EE Strict Mode
 * Support for DC/OS Secrets
 * Support for DC/OS ACL Control
 
-**TODO**
+<details><summary>Installing OSS Marathon-on-Marathon</summary><p>
+
+Create a JSON file mom.json, with at least these parameters:
+
+{% highlight terminal linenos %}
+{
+  "service": {
+    "name": "marathon-dev"
+  },
+  "marathon": {
+    "default-accepted-resource-roles": "dev,*",
+    "framework-name": "marathon-dev",
+    "mesos-role": "dev",
+    "mesos-user": "marathon-dev-principal"
+  }
+}
+{% endhighlight %}
+
+Optionally, make these modifications:
+* Replace 'dev' with the correct role (e.g., 'prod')
+* Configure the "marathon.default-accepted-resource-roles" setting as follows:
+    * If you want the MoM instance to only be able to use resources <b>reserved</b> for your role, specify "dev" (or your correct role).
+    * If you want the MoM instance to also be able to use <b>unreserved</b> resources (in addition to being able to use <reserved> resources), specify "dev,*" (or your correct role and '*', comma separated).
+
+Use it to install the latest version of MoM, using this command:
+
+{ % highlight terminal %}
+dcos package install marathon --options=mom.json
+{% endhighlight %}
+
+</p></details>
 
 #### Installing Enterprise MoM
 
-**TODO**
+Currently, MoM EE can only be installed with the 
 
 #### Configuring Access to Enterprise MoM
 
@@ -185,7 +213,22 @@ In addition to the above discussion about configuring resource allocation for se
 
 In DC/OS, there are two primary ingress mechanisms:
 
-* Marathon-LB, which is haproxy with configurations automatically configured
+* Marathon-LB, which is HAProxy-based, and uses Python to generate haproxy configuration files.  Marathon-LB generates the configuration file by looking at the state of apps running in Marathon.  Specifically, it behaves as follows:
+    * Based on an SSE trigger (sent by Marathon), it'll start a config reload
+    * It'll get a list of all apps and their states from the Marathon API
+    * It will look for apps which have matching `HAPROXY_` labels on them
+    * Using the information about the labels and the running instances (i.e., the ports and IPs on which each instance listens), it'll generate an haproxy.cfg
+    * It'll trigger a reload of HAProxy to read the new config.
+* Edge-LB, which is also HAProxy-based, and consists of a three-tier architecture (using the DC/OS SDK) to configure pools, which in turn configure load balancers.
+    * It has three tiers: 
+        * Edge-LB API Server, which exposes a configuration API
+        * Edge-LB Pool, which receive configurations from the API server and manages load balancer instances
+        * Edge-LB Load Balancer, which actually runs HAProxy
+    * All configuration of Edge-LB is done through an API.  Specifically, a JSON manifest indicating which apps, services, and tasks should be exposed through Edge-LB is submitted to the API Server API.  The API Server then makes corresponding calls to Mesos and Marathon to get the list of task instances (IPs and Ports), and uses this information to generate the configuration.
+
+Here are the key differences (there are many others):
+    * Marathon-LB can only talk to one instance of Marathon.  So if you have multiple instance of Marathon, then you need multiple Marathon-LBs.
+        * Marathon-LB listens on a port on the host.  You can't, for example, have multiple Marathon-LB instances all listening on ports 80 and 443 on the same node.
 
 ### Configuring Marathon-LB with MoM
 

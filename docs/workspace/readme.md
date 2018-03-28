@@ -1,0 +1,1 @@
+Use this directory for testing rendering and things like that.  Note: items in here *will* be rendered to the Internet, so be careful what is placed here.
