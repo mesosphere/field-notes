@@ -31,4 +31,4 @@ This is an unofficial document, put together by members of the DC/OS community, 
 * Other
     * [Multi-Tenant Resource Isolation](docs/multitenant-resource-isolation.md)
     * [Migrating Masters to New IPs](docs/master-replacement.md)
-    * [Automating Cluster Deployment](dcos/automation.md)
+    * [Automating Cluster Deployment](docs/automation.md)
