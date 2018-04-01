@@ -30,12 +30,18 @@ dcos package install marathon --options=mom.json --yes
 ```
 
 ### EE Marathon-on-Marathon
+
+Currently, MoM EE can only be installed with an image provided by Mesosphere.  Please contact Mesosphere for guidance.
 * TODO
 
 ### Configuring Access to EE MoM
+
+Currently, MoM EE can only be installed with an image provided by Mesosphere.  Please contact Mesosphere for guidance.
 * TODO
 
 ### Configuring Access within EE MoM
+
+Currently, MoM EE can only be installed with an image provided by Mesosphere.  Please contact Mesosphere for guidance.
 * TODO
 
 ### Static Reservations: Full Node

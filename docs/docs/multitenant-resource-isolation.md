@@ -108,22 +108,19 @@ In addition to the OSS MoM, DC/OS users who have an enterprise license with Meso
 
 #### Installing OSS Marathon-on-Marathon
 
-Use the directions [here](multitenant-resource-isolation-instructions.md#installing-oss-marathon-on-marathon) to install a Marathon-on-Marathon instance.
+Use the directions [here](multitenant-resource-isolation-instructions.md#oss-marathon-on-marathon) to install a Marathon-on-Marathon instance.
 
 #### Installing Enterprise MoM
 
-Currently, MoM EE can only be installed with an image provided by Mesosphere.  Please contact Mesosphere for guidance.
-{% comment %} TODO {% endcomment %}
+Use the directions [here](multitenant-resource-isolation-instructions.md#ee-marathon-on-marathon) to install n Enterprise Marathon-on-Marathon instance.
 
 #### Configuring Access to Enterprise MoM
 
-Please contact Mesosphere for guidance.
-{% comment %} TODO {% endcomment %}
+Use the directions [here](multitenant-resource-isolation-instructions.md#configuring-access-to-ee-mom) to enable users to access Enterprise Marathon-on-Marathon
 
 #### Configuring Access within Enterprise MoM
 
-Please contact Mesosphere for guidance.
-{% comment %} TODO {% endcomment %}
+Use the directions [here](multitenant-resource-isolation-instructions.md#configuring-access-within-ee-mom) to configure access to paths within Enterprise Marathon-on-Marathon instance.
 
 ### Splitting up Cluster Resources
 There are several options available to us now (in DC/OS 1.10.x and 1.11.x, which correspond to Apache Mesos 1.4.x and 1.5.x, respectively):
@@ -135,20 +132,20 @@ There are several options available to us now (in DC/OS 1.10.x and 1.11.x, which
         * Reserve all of the resources on a given node for a given role.  Instructions [here]()
         * Create one or more reservations on a given node for specific roles, and leave the rest unreserved
 
-    Use the directions [here](multitenant-resource-isolation-instructions.md) to install configure static reservations
+    Use the directions [here](multitenant-resource-isolation-instructions.md#static-reservations-full-node) to configure static reservations for a whole node, or [here](multitenant-resource-isolation-instructions.md#static-reservations-partial-node) statically reserve part of a node.
 
 * **Dynamic Reservations**: Resources on a given cluster node can, during runtime, be configured to be reserved for a given role.  Changing this is achieved by the Mesos Operator API.
     * For example, if we know that we have some large `prod` workload coming up that will require a specific type of resources, we could dynamically reserve resources on a set of certain nodes to be reserved for `prod` workloads.
     * Alternately, we could use the dynamic reservation operator API to reserve a set of resources on a given node on an essentially persistent basis.
 
-    Use the directions [here](multitenant-resource-isolation-instructions.md) to install configure dynamic reservations
+    Use the directions [here](multitenant-resource-isolation-instructions.md#dynamic-reservations) to configure dynamic reservations
 
 * **Quotas**: A set of resources cluster-wide can be reserved for a given role.  
     * For example, assume we have 20 nodes, each with 10 CPU cores and 256 GB of memory (200 cores and 5 TB of memory).  If we want to ensure that `prod` workloads are not affected by other workloads (such as `dev` or `test`), we could set a 'quota' of 100 cores and 2560 GB of memory for the `prod` role.
     * *Of note: a quota is also currently a limit; if you set a quota of 100 cores and 2560 GB of memory for a given role, that role will be guaranteed that amount of resources, but it will also **only** be allowed to use that amount of resources.  From the (documentation)[http://mesos.apache.org/documentation/latest/quota/], `NOTE: Currently quota guarantee also serves as quota limit, i.e. once quota for the role is satisfied, no further resources will be offered to the role except those reserved for the role. This behavior aims to mitigate the absence of quota limit and will be changed in future releases.`*
     * *Additionally of note: quotas cannot currently be updated; they must be removed and reinstated, with separate API queries.  During the interval between the API queries, the framework may exceed its quota limit.*
 
-    Use the directions [here](multitenant-resource-isolation-instructions.md) to install configure quotas
+    Use the directions [here](multitenant-resource-isolation-instructions.md#configuring-quotas) to configure quotas
 
 ### Current Limitations
 
@@ -219,8 +216,8 @@ Here are the key differences (there are many others):
 
 ### Configuring Marathon-LB with MoM
 
-Use the directions [here](multitenant-resource-isolation-instructions.md) to install configure Marathon-LB to work with MoM
+Use the directions [here](multitenant-resource-isolation-instructions.md#configuring-marathon-lb-with-mom) to configure Marathon-LB to work with MoM
 
 ### Configuring Edge-LB with MoM
 
-Use the directions [here](multitenant-resource-isolation-instructions.md) to install configure Edge-LB to work with MoM
+Use the directions [here](multitenant-resource-isolation-instructions.md#configuring-edge-lb-with-mom) to configure Edge-LB to work with MoM
