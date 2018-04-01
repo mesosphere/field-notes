@@ -29,6 +29,12 @@ Use it to install the latest version of MoM, using this command:
 dcos package install marathon --options=mom.json --yes
 ```
 
+### EE Marathon-on-Marathon
+
+### Configuring Access to EE MoM
+
+### Configuring Access within EE MoM
+
 ### Static Reservations: Full Node
 * TODO
 
