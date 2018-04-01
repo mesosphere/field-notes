@@ -50,7 +50,7 @@ echo MESOS_RESOURCES=\'$(cat resources.json | jq -c -s .)\' >> /var/lib/dcos/mes
 
 This does something similar, but it looks all resources and merges it with the current setting of resources.  **Definitely test before you use this.**
 
-## How can I cURL (`curl`) a socket?
+## How do I cURL (`curl`) an endpoint exposed as a socket?
 
 This isn't really a DC/OS-specific thing, but it's useful in general for endpoints that are not exposed as TCP endpoints.
 
