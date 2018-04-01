@@ -30,10 +30,13 @@ dcos package install marathon --options=mom.json --yes
 ```
 
 ### EE Marathon-on-Marathon
+* TODO
 
 ### Configuring Access to EE MoM
+* TODO
 
 ### Configuring Access within EE MoM
+* TODO
 
 ### Static Reservations: Full Node
 * TODO
