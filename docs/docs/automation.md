@@ -266,7 +266,10 @@ export DESCRIPTION="Access to the '/app' Marathon group"
 export PERMISSION_STRING_ESCAPED=$(echo ${PERMISSION_STRING} | sed "s/\//%252F/")
 export DESCRIPTION_ESCAPED=$(echo ${DESCRIPTION} | sed "s:\/:\\\/:g")
 
-# Create ACE
+```
+
+##### Create the ACE endpoint (will fail harmlessly if the ACE already exists)
+```bash
 tee ace.json <<-'EOF'
 {
   "description": "DESCRIPTION_ESCAPED"
@@ -282,15 +285,19 @@ curl -L \
     -X PUT \
     -d @ace.json \
     ${CLUSTER}/acs/api/v1/acls/${PERMISSION_STRING_ESCAPED}
+```
 
-# Add a user to the ACE, with the "read" action
+#### Add a user to the ACE, with the "read" action
+```bash
 curl -L \
     --cacert ${CLUSTER_IP}.ca.crt \
     -H "authorization: token=${TOKEN}" \
     -X PUT \
     ${CLUSTER}/acs/api/v1/acls/${PERMISSION_STRING_ESCAPED}/users/${USERNAME}/${PERMISSION_ACTION}
+```
 
-# Add a group to the ACE, with the "read" action
+#### Add a group to the ACE, with the "read" action
+```bash
 curl -L \
     --cacert ${CLUSTER_IP}.ca.crt \
     -H "authorization: token=${TOKEN}" \
