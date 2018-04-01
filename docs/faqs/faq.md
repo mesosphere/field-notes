@@ -5,6 +5,68 @@
 
 This page is a generic list of how-to's and FAQs for DC/OS.
 
+## Why is Mesos changing my resource_id?
+In DC/OS 1.10 and below, the following behaviors occur:
+* Persistent volumes are attached to a specific Mesos **agent id**.
+* Tasks are attached to a specific **agent id**.
+* In order to persist **agent id** across process restarts (including node reboots), the following properties must match, otherwise you'll get a metadata conflict:
+  * Apache Mesos attributes
+  * Resources allocated to an agent
+
+****
+*In DC/OS 1.11 and above (Apache Mesos 1.5 and above), attributes can be changed and resources can be **added** but not **subtracted** and the Mesos agent ID can be preserved.**
+****
+
+In certain situations, this can cause undesired behavior.  For example, different kernels may interpret the same amount of memory using slightly different calculations, resulting in non-matching resource counts, resulting in a new Mesos agent, resulting in persistent volumes or tasks being unrecoverable.
+
+The reason for this is that by default, certain resources are auto-detected.  The Mesos agent process operates as follows:
+
+1.  Look at environment variable MESOS_RESOURCES (or startup flag --resources) to determine the resources that have been hardcoded.  In DC/OS, this includes disk and ports but does not include CPUs and memory.  This comes formatted as JSON.
+2.  Detect the amount of available CPU and memory
+3.  Determine if the CPU and memory matches the previously detected CPU and memory, and if it does not match, throw an error.
+
+You can observe this situation by looking at the journal logs for `dcos-mesos-slave`, using this command: `journalctl -flu dcos-mesos-slave`.
+
+In order to work around this, you can hard-code the amount of CPU and memory into the MESOS_RESOURCES environment variable, so that subsequent kernel changes do not cause conflicts.
+
+On a generic DC/OS node that has no reserved resources (you may have to do some manaul verification here), you caon configure resources to be hardcoded by running this query:
+
+```bash
+echo MESOS_RESOURCES=\'$(curl -s $(hostname -i):5051/state.json | jq -c '.unreserved_resources_full' | sed 's/,/, /g; s/:/: /g' )\' >> /var/lib/dcos/mesos-resources
+```
+
+What this does: it looks at the full list of unreserved resources on the node (available through the Mesos agent API), and creates an environment variable (used by dcos-mesos-slave) that has the hardcoded settings.  This will prevent the autodetection of resources available.
+
+Alternately, if you have reserved resources in use, you can try something like this:
+
+```bash
+curl -s $(hostname -i):5051/state.json > state.json
+grep MESOS_RESOURCES /var/lib/dcos/mesos-resources | head -1 | awk -F'=' '{print $2}' | tr "'" " " | jq -c '.[]' > resources.json
+jq '. | {mem: .resources.mem, cpus: .resources.cpus}' state.json > cpu_mem.json
+jq --slurpfile r cpu_mem.json  -c '.unreserved_resources_full[] | select(.name == "mem") | .scalar.value = $r[0].mem' state.json >> resources.json
+jq --slurpfile r cpu_mem.json  -c '.unreserved_resources_full[] | select(.name == "cpus") | .scalar.value = $r[0].cpus' state.json >> resources.json
+echo MESOS_RESOURCES=\'$(cat resources.json | jq -c -s .)\' >> /var/lib/dcos/mesos-resources
+```
+
+This does something similar, but it looks all resources and merges it with the current setting of resources.  **Definitely test before you use this.**
+
+## How can I cURL (`curl`) a socket?
+
+This isn't really a DC/OS-specific thing, but it's useful in general for endpoints that are not exposed as TCP endpoints.
+
+First, determine what the socket is, and what the endpoint is.  For example, the Mesos master metrics API is exposed as a socket on DC/OS Masters.  This is documented on the 
+[Master API Routes page](https://docs.mesosphere.com/1.11/api/master-routes/#system)
+and the [Metrics API page](https://docs.mesosphere.com/1.11/metrics/metrics-api/).
+
+In this case, the socket file is `/run/dcos/dcos-metrics-master.sock` and the endpoint is /v0/node.  So you can access this via:
+
+```
+curl --unix-socket /run/dcos/dcos-metrics-master.sock http://dummy/v0/ping
+```
+
+and work outward from there.  Note that determining the endpoint URIs may need some trial and error (for example, to determine whether the endpoint should include the `/metrics/`, e.g., `http://dummy/metrics/v0/ping` vs. `http://dummy/v/0/ping`
+
+
 ## How do I find the latest version of the DC/OS CLI?
 
 DC/OS CLI releases do not strictly line up with the DC/OS versions - they're released independently.  Because of this, the DC/OS CLI links found in the DC/OS UI may not always be up to date.  You can find the latest versions here:
