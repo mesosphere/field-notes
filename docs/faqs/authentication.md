@@ -23,8 +23,8 @@ There are two primary ways to obtain authorization tokens from the DC/OS Access 
 1. With a local account (username/password): You can authenticate against the DC/OS ACS API with a username and password.  **This is primarily for manual interaction with the DC/OS API endpoints**, for the following reason:
   * There is relatively high computational overhead involved with invoking the API with a username/password.  If you have a service repeatedly authenticating with the DC/OS API with a username and password, it is possible to DoS the IAM API.
 
-2. With a service account: If a service account has been set up in DC/OS, the private key associated with the service account can be used to generate a time-limited JWT **Login Token** (distinct from an **Authorization Token**).  
-  * This Login Token can then be used to authenticate against the DC/OS ACS API to generate a long-lived JWT **Authorization Token**.  
+2. With a service account: If a service account has been set up in DC/OS, the private key associated with the service account can be used to generate a *short-lived* JWT **Login Token** (distinct from an **Authorization Token**).  
+  * This Login Token can then be used to authenticate against the DC/OS ACS API to generate a *long-lived* JWT **Authorization Token**.  
   * Anytime you are automating authentication against the DC/OS ACS API, you should use this method.  
   * Authorization tokens generated in this manner are valid for 5 days (by default)
 
