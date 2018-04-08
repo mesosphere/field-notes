@@ -16,12 +16,14 @@ DC/OS uses JWTs (JSON Web Tokens) to handle authentication.  Specifically, in or
 *When authenticating against a DC/OS REST API, the **Authorization Token** should be provided in a header formatted as `"authorization: token=<token>"`.*
 
 *For example, if an account had a token that looked `eyJ0eXAiOiJK...`, then a cURL command to access the mesos state might look something like this: `curl -k http://10.10.0.36/mesos/master/state-summary -H "authorization: token=eyJ0eXAiOiJK..."`*
+
 ***
 
 There are two primary ways to obtain authorization tokens from the DC/OS Access Control Service (ACS) API:
 
 1. With a local account (username/password): You can authenticate against the DC/OS ACS API with a username and password.  **This is primarily for manual interaction with the DC/OS API endpoints**, for the following reason:
   * There is relatively high computational overhead involved with invoking the API with a username/password.  If you have a service repeatedly authenticating with the DC/OS API with a username and password, it is possible to DoS the IAM API.
+
 
 2. With a service account: If a service account has been set up in DC/OS, the private key associated with the service account can be used to generate a *short-lived* JWT **Login Token** (distinct from an **Authorization Token**).  
   * This Login Token can then be used to authenticate against the DC/OS ACS API to generate a *long-lived* JWT **Authorization Token**.  
