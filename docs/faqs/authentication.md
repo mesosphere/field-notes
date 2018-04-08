@@ -20,12 +20,15 @@ DC/OS uses JWTs (JSON Web Tokens) to handle authentication.  Specifically, in or
 
 There are two primary ways to obtain authorization tokens from the DC/OS Access Control Service (ACS) API:
 
-* With a local account (username/password): You can authenticate against the DC/OS ACS API with a username and password.  **This is primarily for manual interaction with the DC/OS API endpoints**, for the following reason:
-  * There is relatively high computational overhead involved with invoking the API with a username/password.  If you have a service repeatedly authenticating with the DC/OS API with a username and password, it is possible to DDOS the IAM API.
+1. With a local account (username/password): You can authenticate against the DC/OS ACS API with a username and password.  **This is primarily for manual interaction with the DC/OS API endpoints**, for the following reason:
+  * There is relatively high computational overhead involved with invoking the API with a username/password.  If you have a service repeatedly authenticating with the DC/OS API with a username and password, it is possible to DoS the IAM API.
 
-* With a service account: If a service account has been set up in DC/OS, a service can use the private key associated with the service account to generate a time-limited JWT **Login Token** (distinct from an **Authorization Token**).  This Login Token can then be used to authenticate against the DC/OS ACS API to generate a long-lived JWT **Authorization Token**.  Anytime you are automating authentication against the DC/OS ACS API, you should use this method.  Note: Authorization tokens generated in this manner are valid for 5 days.
+2. With a service account: If a service account has been set up in DC/OS, the private key associated with the service account can be used to generate a time-limited JWT **Login Token** (distinct from an **Authorization Token**).  
+  * This Login Token can then be used to authenticate against the DC/OS ACS API to generate a long-lived JWT **Authorization Token**.  
+  * Anytime you are automating authentication against the DC/OS ACS API, you should use this method.  
+  * Authorization tokens generated in this manner are valid for 5 days (by default)
 
-## JWT:
+## JWT Authorization token:
 If you have a JWT authorization token, you can decode it (for example, with the tools available at jwt.io), to see its contents (be careful doing this with a token used for a production workload - this is primarily useful as a learning tool to understand what is going on).
 
 For example, if I have this token (from my test cluster)
@@ -150,16 +153,16 @@ pip3 install cryptography
 ```
 
 ### Generate JWT token in JSON format
-You *must* replace both instances of `service-acct` with the name of your service account, (and use the right private key), before you run these.
-
 This example code assumes the following:
 * We want our login token to be valid for 30 seconds
 * We have a service account set up with the uid `sa`
 * We have a private key available as `private.pem`
 
-This example is meant to be very verbose.
+**If you leave off the `exp` field in the JWT body, the JWT will be valid indefinitely.  Doing so would be considered insecure.**
 
-Python2: 
+*This code is intentionally verbose, as an instructional tool.  You probably should understand it and rewrite it for your specific use case.*
+
+Python: 
 ```python
 import time
 import jwt
@@ -200,7 +203,17 @@ After running the above (in either Python2 or Python3), `login_token.json` shoul
 {"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjMyMjAzODMsInVpZCI6InNhIn0.ELKg1InHeTJLQ4wo18JDUgipNfhTVy63UmrUIMUzk5OV0i3mD1yKltJzNJkskg7w4derx0DlJWNn8wuQ8i11O-Blsh2ajUOWTIyBEqjpwaWrLd-qISWXnfR3AZ0V9Lo43cFTAqTTelbv2EC0sAZ6G_cXgiilVjPcWnl-CzlOv1ojWA2Kh3oIIg5_bSIjd8FjHiLR7DFpLQkS9LrXIw6rQfa-Naod2X8U8LW7jPAjVZ_gKQtWEqbD34GW3cx9kSDuYAY01uyVO35em6Ue8V-y1UemPBu04r-qOkfZ_vogxOlURKDZj9k9RW_APWxUYYESGKG8mhqwdl3cFnWjtl1zRA", "uid": "sa"}
 ```
 
-### Submit JWT token
+Note that if you decode the "token" field using jwt.io (or other JWT tools), it indicates the following payload:
+```json
+{
+  "exp": 1523220383,
+  "uid": "sa"
+}
+```
+
+The `exp` field indicates how long the login token is valid; in this case, this login token is valid for 30 seconds from time of generation.
+
+### POST JWT Login Token to DC/OS ACS API get a JWT Authorization Token
 
 ```bash
 export MASTER_IP=10.10.0.36
@@ -215,6 +228,15 @@ curl -k -X POST \
 cat authorization_token.json | python -c 'import sys,json;j=sys.stdin.read();print(json.loads(j))["token"]' > token
 
 cat token
-
 eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOiJzYSIsImV4cCI6MTUyMzY1MjY3Nn0.vunLappuiWxa1zyFR4ESXDtFkS978O_7VwGoSreYVgjmAo4eis2ebo80uOvv548s1Wco01PyGOxFbp-NL5DgIAdj9ZB9k9G75XsE2j7wjOOGfOIlypr31IXoXhN8F4mYVDJ0vZGgujrQ5JRxsbWsEGU8EiDsBlrCF-z-Qk9me3IJ_hpCBb7SBcYNP0-ThWIxwmXlFBIc0uHG67qj8iyZHDk2y1ZEvx_haZKprwoWN6UtTMfay6lMd8tffRmvYEhtsXsZsUgNi6_Ivu8GGnKTLN2BtlC9UnF1t5DIdB7wGdGl-f5zGLbha8j5DuU6GUPIOD3ho1Ew6cCg55jVNvvqFw
 ```
+
+Note that if you decode this JWT token using jwt.io (or other JWT tools), it indicates the following payload:
+```json
+{
+  "uid": "sa",
+  "exp": 1523652676
+}
+```
+
+The `exp` field indicates how long the authorization token is valid; in this case, this authorization token is valid for 5 days from time of generation.
