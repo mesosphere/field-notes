@@ -33,10 +33,10 @@ There are two primary ways to obtain authorization tokens from the DC/OS Access 
 ## JWT Authorization token:
 If you have a JWT authorization token, you can decode it (for example, with the tools available at jwt.io), to see its contents (be careful doing this with a token used for a production workload - this is primarily useful as a learning tool to understand what is going on).
 
-For example, if I have this token (from my test cluster)
+For example, given this JWT token:
 `eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOiJhZG1pbiIsImV4cCI6MTUyMzY0Nzg1NX0.EClzHsGZ7nwZycSA9SEGkAkA78WHpVjcqfD62to4UKDbm_HgroGorH9w8XFZPjDCV5eRAezkFhszElNPF_5_QB317c0IcnhoPUx98zXxQeFx7hY65NVbU4sTyt0_SkPLWXFiEEfZpvdsvyaJCb9-pVxK5ACXV2N1ElRMaoq7-jFtrWfkasCuBm-ijB0eqxpR_EjaAsHeTF2FMGWFCg7mF7De8KVeK2PcDQ1yH0T3h3h6U-5BN5OpAOT-YBumOn7BkRYnJV1D7r1Xf5tUgtArOP35gr-wEVzVO5ReWKht1PNb6z8J_x4a1BRYXNX1n2x1plu02FL-3IMI2a9TXNthyg`
 
-And I go to jwt.io and paste it in the debuger, I see that the header has these contents:
+Go to jwt.io and paste the token into the JWT decoder, you can see that the header has these contents:
 
 ```json
 {
