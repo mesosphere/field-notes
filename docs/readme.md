@@ -23,7 +23,7 @@ This is an unofficial document, put together by members of the DC/OS community, 
     * [DC/OS EE Authentication API](faqs/authentication.md)
     * [DC/OS Certificates for Dummies](faqs/certificates-for-dummies.md)
     * [Simple Python Batch Jobs](faqs/simple-python-batch-jobs.md)
-    * [Changing container logrotation settings](faqs/stderr-stdout-filesize.md)
+    * **WIP** [Changing container logrotation settings](faqs/stderr-stdout-filesize.md)
 
 
 * Spark Stuff
