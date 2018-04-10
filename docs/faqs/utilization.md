@@ -38,7 +38,7 @@ This will result in the following configuration:
 
 ***
 
-For the purposes of testing load, some variant of this cmomand will be used (this one loads four full cores).
+For the purposes of testing load, some variant of this command will be used (this one loads four full cores).
 
 ```bash
 for i in 1 2 3 4; do yes > /dev/null & done; tail -f /dev/null;
