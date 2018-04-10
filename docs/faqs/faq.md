@@ -50,6 +50,62 @@ echo MESOS_RESOURCES=\'$(cat resources.json | jq -c -s .)\' >> /var/lib/dcos/mes
 
 This does something similar, but it looks all resources and merges it with the current setting of resources.  **Definitely test before you use this.**
 
+## How do I set up custom fault domains in my environment?
+Fault domains are detected by running a script on each node (similar to ip-detect).
+
+This script should output JSON as a single line, formatted roughly like this:
+```json
+{"fault_domain":{"region":{"name": "aws/us-west-2"},"zone":{"name": "aws/us-west-2a"}}}
+```
+
+The contents should have roughly these (prefer single-line, not 100% sure this is necessary but probably not a bad practice):
+```json
+{
+  "fault_domain": {
+    "region": {
+      "name": "<name-of-region>"
+    },
+    "zone": {
+      "name": "<name-of-zone>"
+    }
+  }
+}
+```
+
+If, for example, you have a hostname convention where the first four characters identify the datacenter and the next four characters identify physical vs virtual, such as the following:
+tx15physagent02: tx15 datacenter, physical
+tx15virtagent02: tx15 datacenter, virtual
+tx20physagent02: tx20 datacenter, physical
+
+Then you could set up a fault domain script (placed in `genconf/fault-domain-detect`, that gets propagated to `/opt/mesosphere/bin/detect_fault_domain`) that looks like this (assuming that /etc/hostname contains your hostname):
+
+```bash
+#!/bin/bash
+HOSTNAME_FILE=/etc/hostname
+REGION=$(cat ${HOSTNAME_FILE} | head -c4)
+ZONE=$(cat ${HOSTNAME_FILE} | head -c4)-$(cat ${HOSTNAME_FILE} | head -c8 | tail -c4)
+echo "{\"fault_domain\":{\"region\":{\"name\": \"${REGION}\"},\"zone\":{\"name\": \"${ZONE}\"}}}"
+```
+
+This would result in these JSON outputs:
+* tx15physagent02: `{"fault_domain":{"region":{"name": "tx15"},"zone":{"name": "tx15-phys"}}}` 
+* tx15virtagent02: `{"fault_domain":{"region":{"name": "tx15"},"zone":{"name": "tx15-virt"}}}`
+* tx20physagent02: `{"fault_domain":{"region":{"name": "tx20"},"zone":{"name": "tx20-phys"}}}`
+
+Note that it is not strictly required that the zone name include the region name, but it may be useful for clarity's sake.
+
+## Example ip-detect script
+The fault domain detect script should be placed in `genconf/ip-detect` and gets propagated to `/opt/mesosphere/bin/detect_ip`.
+
+This should, in my experience, work in most environments (even in environments without Internet access - this doesn't actually rely on 8.8.8.8 reachability) to identify the primary IP:
+
+```bash
+#!/bin/bash
+ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
+```
+
+*In my experience, it does not matter if this outputs an endline or not.*
+
 ## How do I cURL (`curl`) an endpoint exposed as a socket?
 
 This isn't really a DC/OS-specific thing, but it's useful in general for endpoints that are not exposed as TCP endpoints.
