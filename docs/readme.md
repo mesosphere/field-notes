@@ -8,6 +8,7 @@ This is an unofficial document, put together by members of the DC/OS community, 
 * Walkthroughs
     * [Simple Single-Master DC/OS Installation Walkthrough](walkthroughs/single-master-setup.md)
     * [Simple Multi-Master DC/OS Installation Walkthrough](walkthroughs/multi-master-setup.md)
+    * **WIP** [Local Universe Quick Start Guide](walkthroughs/local-universe.md) 
     * [DC/OS Custom Universe](walkthroughs/custom-universe.md)
 
 
@@ -27,6 +28,7 @@ This is an unofficial document, put together by members of the DC/OS community, 
 * Spark Stuff
     * [Spark Notes](spark/spark.md)
     * [Spark Env Setup](spark/env.md)
+
 
 * Other
     * [Multi-Tenant Resource Isolation](docs/multitenant-resource-isolation.md)
