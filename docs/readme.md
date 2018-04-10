@@ -8,7 +8,7 @@ This is an unofficial document, put together by members of the DC/OS community, 
 * Walkthroughs
     * [Simple Single-Master DC/OS Installation Walkthrough](walkthroughs/single-master-setup.md)
     * [Simple Multi-Master DC/OS Installation Walkthrough](walkthroughs/multi-master-setup.md)
-    * [WIP Local Universe Quick Start Guide](walkthroughs/local-universe.md) 
+    * **WIP** [Local Universe Quick Start Guide](walkthroughs/local-universe.md) 
     * [DC/OS Custom Universe](walkthroughs/custom-universe.md)
 
 
