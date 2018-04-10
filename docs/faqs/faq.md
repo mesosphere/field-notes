@@ -92,7 +92,9 @@ This would result in these JSON outputs:
 * tx15virtagent02: `{"fault_domain":{"region":{"name": "tx15"},"zone":{"name": "tx15-virt"}}}`
 * tx20physagent02: `{"fault_domain":{"region":{"name": "tx20"},"zone":{"name": "tx20-phys"}}}`
 
-Note that it is not strictly required that the zone name include the region name, but it may be useful for clarity's sake.
+More generically then the above, populate REGION with your region and ZONE with your zone, and use the same echo as above.
+
+*It is not strictly required that the zone name include the region name, but it may be useful for clarity's sake.*
 
 ## Example ip-detect script
 The fault domain detect script should be placed in `genconf/ip-detect` and gets propagated to `/opt/mesosphere/bin/detect_ip`.
