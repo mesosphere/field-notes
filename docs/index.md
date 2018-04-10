@@ -29,7 +29,10 @@ This is an unofficial document, put together by members of the DC/OS community, 
     * [Spark Notes](spark/spark.md)
     * [Spark Env Setup](spark/env.md)
 
+
 * Other
     * [Multi-Tenant Resource Isolation](docs/multitenant-resource-isolation.md)
     * [Migrating Masters to New IPs](docs/master-replacement.md)
     * [Automating Cluster Deployment](docs/automation.md)
+
+<!-- Any changes made here here should also be made in index.md -->
