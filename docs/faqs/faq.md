@@ -106,7 +106,7 @@ This should, in my experience, work in most environments (even in environments w
 ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 ```
 
-*In my experience, it does not matter if this outputs an endline or not.*
+*In my experience, it does not matter whether this outputs an endline or not.*
 
 ## How do I cURL (`curl`) an endpoint exposed as a socket?
 
