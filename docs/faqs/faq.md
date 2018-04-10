@@ -131,9 +131,104 @@ DC/OS CLI releases do not strictly line up with the DC/OS versions - they're rel
 
 https://github.com/dcos/dcos-cli/releases
 
-## How come I can't use the `dcos security` command?
+## How come I can't use the `dcos security`, `dcos backup`, or `dcos license` command?
 
 The `dcos security` command comes from the dcos-enterprise-cli Universe package, and can be installed by running `dcos package install dcos-enterprise-cli --cli`.  Note that the features of this CLI add-on will only work with the Enterprise edition of DC/OS.
+
+## How do I install the `dcos-enterprise-cli` package in a local universe cluster?
+
+Installing packages relies on the place actually doing the installation being able to reach the local universe.  If you're following the default local universe instructions, you'll end up placing the local universe on your masters on master.mesos, and it is unlikely that the place you are running the `dcos` CLI tool from (your laptop, the bootstrap) actually knows how to resolve master.mesos.  Often, it will also be firewalled off.
+
+Here's the workaround.
+
+1. Identify the latest relevant dcos-enterprise CLI package for your client.
+    * Go to https://github.com/mesosphere/universe/tree/version-3.x/repo/packages/D/dcos-enterprise-cli
+    * Dig into the subdirectories, and look at package.json to identify the highest iteration that meets your DC/OS version (`minDcosReleaseVersion`).  For example, as of 4/10/2018:
+      * DC/OS 1.11: Release 18 (https://github.com/mesosphere/universe/blob/version-3.x/repo/packages/D/dcos-enterprise-cli/18/package.json)
+      * DC/OS 1.10: Release 15 (https://github.com/mesosphere/universe/blob/version-3.x/repo/packages/D/dcos-enterprise-cli/15/package.json)
+    * In that particular release directory, lookat resource.json, and look in the path `.cli.binaries.<platform>.x86-64.url`.  For example, as of 4/10/2018, for DC/OS 1.11.0 installing the DC/OS Enterprise CLI subcommand package on a Linux client, I would use these:
+      * Linux: `https://downloads.mesosphere.io/cli/binaries/linux/x86-64/1.4.3/5f9f28ba39bec883a3f82d652a549dc06138f77b81c71aa6417d95d4024e55b7/dcos-enterprise-cli` (ref: https://github.com/mesosphere/universe/blob/version-3.x/repo/packages/D/dcos-enterprise-cli/18/resource.json#L14)
+      * OSX: `https://downloads.mesosphere.io/cli/binaries/darwin/x86-64/1.4.3/c934ddb9624c27ad7723d234edb7fc9060d8a70dc43f5c7f99855c63dae0aac8/dcos-enterprise-cli` (ref: https://github.com/mesosphere/universe/blob/version-3.x/repo/packages/D/dcos-enterprise-cli/18/resource.json#L26)
+2. cURL / wget / otherwise transfer the relevant file (which is a zip file) to the computer/server where your `dcos` CLI tool is:
+
+    ```bash
+    [tmp]$ curl -LO https://downloads.mesosphere.io/cli/binaries/linux/x86-64/1.4.3/5f9f28ba39bec883a3f82d652a549dc06138f77b81c71aa6417d95d4024e55b7/dcos-enterprise-cli
+      % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                    Dload  Upload   Total   Spent    Left  Speed
+    100 25.3M  100 25.3M    0     0  66.6M      0 --:--:-- --:--:-- --:--:-- 66.7M
+
+    [tmp]$ ls -alh
+    total 26M
+    drwxrwxr-x. 2 centos centos   32 Apr 10 12:14 .
+    drwx------. 8 centos centos 4.0K Apr 10 12:14 ..
+    -rw-rw-r--. 1 centos centos  26M Apr 10 12:14 dcos-enterprise-cli
+    ```
+
+3. Unzip the file.  Note that in OSX, it *may* include additional unrelated files:
+
+    ```bash
+    $ unzip dcos-enterprise-cli 
+    Archive:  dcos-enterprise-cli
+      creating: bin/
+      inflating: bin/dcos-security       
+      inflating: bin/dcos-backup         
+      inflating: bin/dcos-license 
+    ```
+
+4. Make sure the binaries all have the execute bit (they probably do by default):
+
+      ```bash
+      $ chmod +x bin/dcos-*
+      ```
+
+4. Make the directory `~/.dcos/subcommands/dcos-enterprise-cli/env/bin`, and place the `dcos-*` binaries in it:
+
+    ```bash
+    $ mkdir -p ~/.dcos/subcommands/dcos-enterprise-cli/env/bin
+    $ cp -pv bin/dcos-* ~/.dcos/subcommands/dcos-enterprise-cli/env/bin/
+    ‘bin/dcos-backup’ -> ‘/home/centos/.dcos/subcommands/dcos-enterprise-cli/env/bin/dcos-backup’
+    ‘bin/dcos-license’ -> ‘/home/centos/.dcos/subcommands/dcos-enterprise-cli/env/bin/dcos-license’
+    ‘bin/dcos-security’ -> ‘/home/centos/.dcos/subcommands/dcos-enterprise-cli/env/bin/dcos-security’
+    [centos@ip-10-10-0-26 tmp]$ ll ~/.dcos/subcommands/dcos-enterprise-cli/env/bin
+
+    $ ls -alh ~/.dcos/subcommands/dcos-enterprise-cli/env/bin
+    total 33M
+    drwxrwxr-x. 2 centos centos   63 Apr 10 12:24 .
+    drwxrwxr-x. 3 centos centos   16 Apr 10 12:23 ..
+    -rwxr-xr-x. 1 centos centos  11M Feb 13 13:45 dcos-backup
+    -rwxr-xr-x. 1 centos centos  14M Feb 13 13:50 dcos-license
+    -rwxr-xr-x. 1 centos centos 8.6M Feb 13 13:56 dcos-security
+    ```
+
+5. Profit:
+
+    ```
+    $ dcos
+    Command line utility for the Mesosphere Datacenter Operating
+    System (DC/OS). The Mesosphere DC/OS is a distributed operating
+    system built around Apache Mesos. This utility provides tools
+    for easy management of a DC/OS installation.
+
+    Available DC/OS commands:
+
+      auth           	Authenticate to DC/OS cluster
+      backup         	Access DC/OS backup functionality
+      cluster        	Manage your DC/OS clusters
+      config         	Manage the DC/OS configuration file
+      help           	Display help information about DC/OS
+      job            	Deploy and manage jobs in DC/OS
+      license        	Manage your DC/OS licenses
+      marathon       	Deploy and manage applications to DC/OS
+      node           	View DC/OS node information
+      package        	Install and manage DC/OS software packages
+      security       	DC/OS security related commands
+      service        	Manage DC/OS services
+      task           	Manage DC/OS tasks
+
+    Get detailed command description with 'dcos <command> --help'.
+    ```
+
+*Note: The above steps install the `security`, `backup`, and `license` tools for all clusters your account communicates with.  You can also set the above up on a per-cluster basis by using the directory `~/.dcos/clusters/<cluster-id>/subcommands/dcos-enterprise-cli/env/`.  For example: `~/.dcos/clusters/9e1a0745-99bc-41f4-a4f1-7dc978fae438/subcommands/dcos-enterprise-cli/env/`*
 
 ## How do I configure additional Mesos attributes on my nodes, for use with constraints?
 
