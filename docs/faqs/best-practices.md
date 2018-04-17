@@ -1,3 +1,5 @@
+# This document is a Work In Progress
+
 # Best practices for DC/OS
 
 This is a list of best practices for DC/OS, in no particular order.

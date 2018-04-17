@@ -35,6 +35,6 @@ This is an unofficial document, put together by members of the DC/OS community, 
     * [Multi-Tenant Resource Isolation](docs/multitenant-resource-isolation.md)
     * [Migrating Masters to New IPs](docs/master-replacement.md)
     * [Automating Cluster Deployment](docs/automation.md)
-    * [Generic Best Practices](faqs/best-practices.md)
+    * **WIP** [Generic Best Practices](faqs/best-practices.md)
 
 <!-- Any changes made here here should also be made in index.md -->
