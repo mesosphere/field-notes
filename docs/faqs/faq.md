@@ -32,7 +32,7 @@ In order to work around this, you can hard-code the amount of CPU and memory int
 On a generic DC/OS node that has no reserved resources (you may have to do some manaul verification here), you caon configure resources to be hardcoded by running this query:
 
 ```bash
-echo MESOS_RESOURCES=\'$(curl -s $(hostname -i):5051/state.json | jq -c '.unreserved_resources_full' | sed 's/,/, /g; s/:/: /g' )\' >> /var/lib/dcos/mesos-resources
+echo MESOS_RESOURCES=\'$(curl -s $(hostname -i):5051/state.json | jq -c '.unreserved_resources_full' | sed 's/,/, /g; s/:/: /g' )\' | sudo tee -a /var/lib/dcos/mesos-resources
 ```
 
 What this does: it looks at the full list of unreserved resources on the node (available through the Mesos agent API), and creates an environment variable (used by dcos-mesos-slave) that has the hardcoded settings.  This will prevent the autodetection of resources available.
