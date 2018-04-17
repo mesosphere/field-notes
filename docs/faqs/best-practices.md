@@ -89,15 +89,16 @@ On the Agents, persistent configuration override files are stored and it is a bi
 * Resource Overrides: `/var/lib/dcos/mesos-resources`
 
 On the Agents, the following directories under `/var/lib/mesos` should ideally be on distinct partitions, but if that's too much to ask, please ensure that `/var/lib/mesos` is hosted on a separate partition at the very least:
-`/var/lib/mesos/slave/slaves` - This is used to house the sandbox directories for tasks
-`/var/lib/mesos/slave/volumes` - This is used by frameworks that consume `ROOT` persistent volumes
-`/var/lib/mesos/docker/store` - This is used to store Docker Image Layers that are used to provision UCR containers
+* `/var/lib/mesos/slave/slaves` - This is used to house the sandbox directories for tasks
+* `/var/lib/mesos/slave/volumes` - This is used by frameworks that consume `ROOT` persistent volumes
+* `/var/lib/mesos/docker/store` - This is used to store Docker Image Layers that are used to provision UCR containers
 
 Miscellaneous directories that should be hosted on their own partitions:
-`/var/lib/docker` - This is used to store Docker Image Layers and by Containers launched with the Docker Engine
-`/dcos/volume<N>` (e.g., `/dcos/volume0`, `/dcos/volume1` ...) - This is used by frameworks that consume `MOUNT` persistent volumes.
+* `/var/lib/docker` - This is used to store Docker Image Layers and by Containers launched with the Docker Engine
+* `/dcos/volume<N>` (e.g., `/dcos/volume0`, `/dcos/volume1` ...) - This is used by frameworks that consume `MOUNT` persistent volumes.
 
 The disk space that Apache Mesos advertises in its UI is the (sum of the) space advertised by filesystem(s) underpinning `/var/lib/mesos`
+
 Note: This space is further rolled up if there are `MOUNT` volumes (`/dcos/volume<N>`) present
 
 Note: `/opt/mesosphere` should also ideally be on its own partition for DC/OS 1.11 and above
