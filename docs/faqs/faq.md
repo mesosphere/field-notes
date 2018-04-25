@@ -263,9 +263,24 @@ sudo systemctl start dcos-mesos-slave
 sudo rm /var/lib/mesos/slave/meta/slaves/latest
 ```
 
+## What is the format used to specify constraints in SDK frameworks?
+SDK frameworks (Kafka, Elastic, Cassandra, Datastax Enterprise, Confluent Kafka, HDFS, Edge-LB, and others) support the same types of node placement constraints as Marathon does, but the format is slightly different.  Everything should be a flat string, with elements of a constraint separated by colons (`:`) and separate constraints separated by semicolons (`;`).  If you have multiple constraints, all constraints must be met for a pod to be placed on a node.
+
+For example, this is the default constraint (you should generally keep this, unless you have a specific reason to remove it):
+`hostname:UNIQUE`
+
+If you wanted to add an additional LIKE constraint, using a REGEX:
+`hostname:UNIQUE;hostname:LIKE:10.0.0.[35|36|37]`
+
+If you wanted a third constraint:
+`hostname:UNIQUE;hostname:LIKE:10.0.0.[35|36|37];type:LIKE:baremetal`
+
+
+
 ## How do I change the resources for a DC/OS node?
 
 **This will kill all tasks running on the agent**
+*As of DC/OS 1.11, you can increase the number of resources on a node without doing all of this; you just have to increase the resource and restart `dcos-mesos-slave` (or turn the machine back on, if you can't increase resources dynamically).  If you are decreasing the resource, you must still follow this process*
 
 1) Make your changes to the agent node (change number of CPUs/memory/disk, etc.)
 
