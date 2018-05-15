@@ -13,12 +13,13 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 ```
 
 * Make sure that your ip-detect script returns the expected IP address (and that this IP address actually exists as an IP address on the system)
-    > /opt/mesosphere/bin/detect_ip
 
-    > ip a | grep $(/opt/mesosphere/bin/detect_ip)
+    `bash /opt/mesosphere/bin/detect_ip`
+
+    `ip a | grep $(/opt/mesosphere/bin/detect_ip)`
 
     ```bash
-    $ /opt/mesosphere/bin/detect_ip
+    $ bash /opt/mesosphere/bin/detect_ip
         192.168.10.31
 
     $ ip a | grep $(/opt/mesosphere/bin/detect_ip)
@@ -27,7 +28,7 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 
 * Check that time is reporting healthy:
 
-    > ENABLE_CHECK_TIME=true /opt/mesosphere/bin/check-time
+    `ENABLE_CHECK_TIME=true /opt/mesosphere/bin/check-time`
 
     ```bash
     $ ENABLE_CHECK_TIME=true /opt/mesosphere/bin/check-time
@@ -38,7 +39,7 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 
 * Check that exhibitor is healthy (should return with JSON indicating all of your masters, all with `"description":"serving"` and `"code":3`
 
-    > curl -s $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}'):8181/exhibitor/v1/cluster/status
+    `curl -s $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}'):8181/exhibitor/v1/cluster/status`
 
     ```bash
     $ curl -s $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}'):8181/exhibitor/v1/cluster/status
@@ -48,7 +49,7 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 
 * If you're on Enterprise DC/OS, check that cockroachdb is healthy (look for ranges_underreplicated to be 0)
 
-    > curl -skL 127.0.0.1:8090/_status/vars | grep ranges_underreplicated
+    `curl -skL 127.0.0.1:8090/_status/vars | grep ranges_underreplicated`
 
     ```bash
     $ curl -skL 127.0.0.1:8090/_status/vars | grep ranges_underreplicated
@@ -59,7 +60,7 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 
 * Verify that spartan is healthy
 
-    > ping -c2 -W1 ready.spartan
+    `ping -c2 -W1 ready.spartan`
 
     ```bash
     $ ping -c2 -W1 ready.spartan
@@ -76,7 +77,7 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 * Verify that Mesos is healthy (look for `overlay/log/recovered` and `registrar/log/recovered` to both be 1):
 
 
-    > curl -s $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}'):5050/metrics/snapshot | tr ',' '\n' | grep recovered
+    `curl -s $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}'):5050/metrics/snapshot | tr ',' '\n' | grep recovered`
 
     ```bash
     $ curl -s $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}'):5050/metrics/snapshot | tr ',' '\n' | grep recovered
@@ -86,7 +87,7 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 
 * Verify that mesos-dns is healthy
 
-    > ping -c2 -W1 leader.mesos
+    `ping -c2 -W1 leader.mesos`
 
     ```bash
     $ ping -c2 -W1 leader.mesos
@@ -101,7 +102,7 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 
 * Verify that Marathon is healthy
 
-    > curl -skL $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}'):8080/v2/leader
+    `curl -skL $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}'):8080/v2/leader`
 
     ```bash
     $ curl -skL $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}'):8080/v2/leader
@@ -110,7 +111,7 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 
 * See if the UI responds to curl:
 
-    > curl $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}') -kL | head -c300
+    `curl $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}') -kL | head -c300`
 
     ```bash
     $ curl $(ip route get 8.8.8.8 | awk 'NR==1{print $NF}') -skL | head -c300
