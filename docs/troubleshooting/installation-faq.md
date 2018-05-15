@@ -10,7 +10,7 @@ This simple ip-detect script that should almost always work:
 ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 ```
 
-Things to try/check when standnig up a DC/OS cluster:
+Things to try/check when standing up or troubleshooting a DC/OS cluster:
 
 * Make sure that your ip-detect script returns the expected IP address (and that this IP address actually exists as an IP address on the system)
 
