@@ -3,14 +3,14 @@
 
 This is meant to be a rolling FAQ for DC/OS users.  This is very incomplete.
 
-Things to try/check when standnig up a DC/OS cluster:
-
-* A simple ip-detect script that should almost always work:
+This simple ip-detect script that should almost always work:
 
 ```bash
 #!/bin/bash
 ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 ```
+
+Things to try/check when standnig up a DC/OS cluster:
 
 * Make sure that your ip-detect script returns the expected IP address (and that this IP address actually exists as an IP address on the system)
 
