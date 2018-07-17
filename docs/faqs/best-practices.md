@@ -62,7 +62,7 @@ Use service accounts for authenticating against DC/OS from any automation (aside
 Ideally you'd have separate partitions for the following filesystem paths (WIP to distinguish masters and agents into different tables)
 * `/var/lib/mesos` This is the disk space that Mesos advertises in the UI (Note: This space is rolled up if there are `MOUNT` volumes - `/dcos/volume<N>` - present)
 * `/var/lib/mesos/slave/volumes` This is used by frameworks that consume `ROOT` persistent volumes
-* `/var/lib/mesos/docker/store` This is used to store Docker Image Layers that are used to provision UCR containers
+* `/var/lib/mesos/slave/store/docker` This is used to store Docker Image Layers that are used to provision UCR containers
 * `/var/lib/docker` This is used to store Docker Image Layers and by Containers launched with the Docker Engine
 * `/var/lib/dcos` On Masters this is where Exhibitor stores Zookeeper data, on the agents it's where persistent configuration files (`/var/lib/dcos/mesos-slave-common` and `/var/lib/dcos/mesos-resources`) are stored. Highly recommended that it be kept separate on the masters, a bit of an overkill on agents.
 * `/dcos/volume<N>` (e.g., `/dcos/volume0`, `/dcos/volume1` ...) This is used by frameworks that consume `MOUNT` persistent volumes.
