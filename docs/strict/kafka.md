@@ -72,7 +72,7 @@ done < ${PERMISSION_LIST_FILE}
 
 dcos package install ${PACKAGE_NAME} --package-version=${PACKAGE_VERSION} --options=${PACKAGE_OPTIONS_FILE} --yes --app
 
-echo zookeeper-0-server.TRIMMED_NAME.autoip.dcos.thisdcos.directory:1140,zookeeper-1-server.TRIMMED_NAME.autoip.dcos.thisdcos.directory:1140,zookeeper-2-server.TRIMMED_NAME.autoip.dcos.thisdcos.directory:1140 | sed "s|TRIMMED_NAME|${TRIMMED_NAME}|g" > ${ENDPOINT_FILE}
+echo "zookeeper-0-server.${TRIMMED_NAME}.autoip.dcos.thisdcos.directory:1140,zookeeper-1-server.${TRIMMED_NAME}.autoip.dcos.thisdcos.directory:1140,zookeeper-2-server.${TRIMMED_NAME}.autoip.dcos.thisdcos.directory:1140" > ${ENDPOINT_FILE}
 ```
 
 # Create topics
