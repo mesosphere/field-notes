@@ -44,14 +44,14 @@ NTP or Chrony **must** be properly configured, and **must** be properly working,
 Use the advanced installer.  Do not use any of the following:
 * CLI Installer
 * GUI Installer
-* Cloudformation Template
+* CloudFormation Template
 
 Also, ideally, use some CI to deploy DC/OS.
 
 ## Important Best Practices
 
 #### Docker version
-Use Docker 17.06.2 for DC/OS.  Note that this is my personal preference; official documentation indicates that 17.05 is prefered, but 17.05 is edge and 17.06 is stable.
+Use Docker 17.06.2 for DC/OS.
 
 #### Automation
 Use service accounts for authenticating against DC/OS from any automation (aside from one-time automation such as deployment).
@@ -67,9 +67,65 @@ Ideally you'd have separate partitions for the following filesystem paths (WIP t
 * `/var/lib/dcos` On Masters this is where Exhibitor stores Zookeeper data, on the agents it's where persistent configuration files (`/var/lib/dcos/mesos-slave-common` and `/var/lib/dcos/mesos-resources`) are stored. Highly recommended that it be kept separate on the masters, a bit of an overkill on agents.
 * `/dcos/volume<N>` (e.g., `/dcos/volume0`, `/dcos/volume1` ...) This is used by frameworks that consume `MOUNT` persistent volumes.
 
+#### Filesystem sizing:
+A common question is 'what filesystems do I need, and how large do they need to be?'
+
+The answer to this question is always going to be 'it depends' because it's going to be heavily cluster-dependent, but the below should be enough to get you started.  Just make sure you're monitoring your specific cluster to see which partitions are consumed.
+```
+bootstrap node
+/           Default Linux Setting (minimum 100G)
+/boot       Default Linux Setting
+/home       Default Linux Setting
+/var        Default Linux Setting (minimum 20G)
+/var/log    Default Linux Setting (minimum 20G)
+/tmp        Default Linux Setting (minimum 10G)
+/opt        Default Linux Setting (minimum 20G)
+swap        Default Linux Setting
+
+master nodes
+/           Default Linux Setting
+/boot       Default Linux Setting
+/home       Default Linux Setting
+/var        Default Linux Setting (minimum 20G)
+/var/log    Default Linux Setting (minimum 20G)
+/tmp        Default Linux Setting (minimum 10G)
+/opt        Default Linux Setting (minimum 20G)
+swap        Default Linux Setting
+--- DC/OS-specific mounts
+/var/lib/dcos       minimum 10G, should be fast (SSD or faster)
+/var/lib/docker     minimum 20G
+
+private nodes
+/           Default Linux Setting
+/boot       Default Linux Setting
+/home       Default Linux Setting
+/var        Default Linux Setting (minimum 20G)
+/var/log    Default Linux Setting (minimum 20G)
+/tmp        Default Linux Setting (minimum 10G)
+/opt        Default Linux Setting (minimum 20G)
+swap        Default Linux Setting
+--- DC/OS-specific mounts
+/var/lib/dcos       minimum 20G
+/var/lib/docker     minimum 40G
+/var/lib/mesos      minimum 40G
+
+public nodes
+/           Default Linux Setting
+/boot       Default Linux Setting
+/home       Default Linux Setting
+/var        Default Linux Setting (minimum 20G)
+/var/log    Default Linux Setting (minimum 20G)
+/tmp        Default Linux Setting (minimum 10G)
+/opt        Default Linux Setting (minimum 20G)
+swap        Default Linux Setting
+--- DC/OS-specific mounts
+/var/lib/dcos       minimum 10G
+/var/lib/docker     minimum 40G
+/var/lib/mesos      minimum 40G
+```
+
 
 #### Informational
-(Needs to be merged with above)
 These are replicated state locations:
 
 On the Masters, under `/var/lib/dcos`

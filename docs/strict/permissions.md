@@ -1,4 +1,9 @@
-This is a WIP
+This is a WIP.  It lists an example set of permissions that can be used to start out a customer, for four primary profiles:
+
+* Systemwide full permissions
+* Systemwide read-only permissions
+* Workspace-specific full permissions
+* Workspace-specific read-only permissions
 
 # Systemwide Full Permissions
 ```bash
@@ -130,7 +135,11 @@ dcos:mesos:agent:sandbox:app_id:/tenant read
 dcos:mesos:master:marathon:app_id:/tenant read
 ```
 
+
 # All Permissions:
+This section indicates most all of the available permissions highlighting those that have not been included in one of the permission sets above.  These are basically permissions that *could* be added if you're still missing permissions from the above list.
+
+There's also a very brief description of what each permission set does.
 ```bash
 ##### AdminRouter
 # ACS

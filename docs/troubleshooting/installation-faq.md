@@ -11,6 +11,14 @@ ip route get 8.8.8.8 | awk 'NR==1{print $NF}'
 ```
 
 Things to try/check when standing up or troubleshooting a DC/OS cluster:
+* Make sure that selinux is in permissive or disabled mode:
+
+    `getenforce`
+
+    ```bash
+    $ getenforce
+    Permissive
+    ```
 
 * Make sure that your ip-detect script returns the expected IP address (and that this IP address actually exists as an IP address on the system)
 

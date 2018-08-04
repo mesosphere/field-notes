@@ -1,3 +1,4 @@
+This is a parameterized way to install Kafka in strict mode.
 
 # Install security CLI
 ```bash
@@ -52,6 +53,7 @@ sed -i "s|SERVICE_ACCOUNT|${SERVICE_ACCOUNT}|g" ${PACKAGE_OPTIONS_FILE}
 sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PACKAGE_OPTIONS_FILE}
 sed -i "s|ZK_URI|${ZK_URI}|g" ${PACKAGE_OPTIONS_FILE}
 
+# These may not all be necessary, but it does work.
 tee ${PERMISSION_LIST_FILE} <<-'EOF'
 dcos:mesos:master:framework:role:SERVICE_ROLE       create
 dcos:mesos:master:reservation:role:SERVICE_ROLE     create
