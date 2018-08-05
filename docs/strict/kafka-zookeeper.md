@@ -54,6 +54,7 @@ sed -i "s|SERVICE_ACCOUNT_SECRET|${SERVICE_ACCOUNT_SECRET}|g" ${PACKAGE_OPTIONS_
 sed -i "s|PRINCIPAL|${PRINCIPAL}|g" ${PACKAGE_OPTIONS_FILE}
 sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PACKAGE_OPTIONS_FILE}
 
+
 # These may not all be necessary, but it does work.
 # The 'role' permissions grant permission to create a reservation - need create only
 # The 'principal' permissions grant permission to delete a reservation - need delete only

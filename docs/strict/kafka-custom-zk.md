@@ -56,14 +56,14 @@ sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PACKAGE_OPTIONS_FILE}
 sed -i "s|ZK_URI|${ZK_URI}|g" ${PACKAGE_OPTIONS_FILE}
 
 # These may not all be necessary, but it does work.
+# The 'role' permissions grant permission to create a reservation - need create only
+# The 'principal' permissions grant permission to delete a reservation - need delete only
 tee ${PERMISSION_LIST_FILE} <<-'EOF'
 dcos:mesos:master:framework:role:SERVICE_ROLE       create
 dcos:mesos:master:reservation:role:SERVICE_ROLE     create
 dcos:mesos:master:volume:role:SERVICE_ROLE          create
 dcos:mesos:master:task:user:nobody                  create
-dcos:mesos:master:reservation:principal:PRINCIPAL   create
 dcos:mesos:master:reservation:principal:PRINCIPAL   delete
-dcos:mesos:master:volume:principal:PRINCIPAL        create
 dcos:mesos:master:volume:principal:PRINCIPAL        delete
 EOF
 
