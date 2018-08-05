@@ -10,12 +10,12 @@ dcos package install dcos-enterprise-cli --cli --yes
 # Create key and service account
 ```bash
 # Do not specify a leading slash ('/')
-export SERVICE_NAME="dev-2/path-to/kafka-3-czk"
+export SERVICE_NAME="dev-2/path-to/kafka-czk-4"
 export PACKAGE_NAME="kafka"
 export PACKAGE_VERSION="2.3.0-1.1.0"
 
 # Either directly specify ZK_URI, or specify the service_name for kafka-zookeeper
-export ZK_SERVICE_NAME="kafka-zk-1"
+export ZK_SERVICE_NAME="dev-2/path-to/kafka-zk-4"
 export ZK_SERVICE_DNS_NAME=$(echo ${ZK_SERVICE_NAME} | sed "s|/||g")
 export ZK_URI="zookeeper-0-server.${ZK_SERVICE_DNS_NAME}.autoip.dcos.thisdcos.directory:1140,zookeeper-1-server.${ZK_SERVICE_DNS_NAME}.autoip.dcos.thisdcos.directory:1140,zookeeper-2-server.${ZK_SERVICE_DNS_NAME}.autoip.dcos.thisdcos.directory:1140"
 

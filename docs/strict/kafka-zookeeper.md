@@ -14,7 +14,12 @@ export SERVICE_NAME="dev-2/path-to/kafka-zk-4"
 export PACKAGE_NAME="kafka-zookeeper"
 export PACKAGE_VERSION="2.2.0-3.4.11"
 
+# Intentional blank space here.
+
+
+
 # principal is SERVICE_NAME with slashes replaced with '__'
+# You can call the principal anything, but it makes the permissions harder; the principal must match the service account name for reservation deletion.
 export PRINCIPAL=$(echo ${SERVICE_NAME} | sed "s|/|__|g")
 
 # dns is generated from SERVICE_NAME with slashes removed
@@ -43,19 +48,21 @@ tee ${PACKAGE_OPTIONS_FILE} <<-'EOF'
 }
 EOF
 
+
+
 sed -i "s|SERVICE_ACCOUNT_SECRET|${SERVICE_ACCOUNT_SECRET}|g" ${PACKAGE_OPTIONS_FILE}
 sed -i "s|PRINCIPAL|${PRINCIPAL}|g" ${PACKAGE_OPTIONS_FILE}
 sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PACKAGE_OPTIONS_FILE}
 
 # These may not all be necessary, but it does work.
+# The 'role' permissions grant permission to create a reservation - need create only
+# The 'principal' permissions grant permission to delete a reservation - need delete only
 tee ${PERMISSION_LIST_FILE} <<-'EOF'
 dcos:mesos:master:framework:role:SERVICE_ROLE       create
 dcos:mesos:master:reservation:role:SERVICE_ROLE     create
 dcos:mesos:master:volume:role:SERVICE_ROLE          create
 dcos:mesos:master:task:user:nobody                  create
-dcos:mesos:master:reservation:principal:PRINCIPAL   create
 dcos:mesos:master:reservation:principal:PRINCIPAL   delete
-dcos:mesos:master:volume:principal:PRINCIPAL        create
 dcos:mesos:master:volume:principal:PRINCIPAL        delete
 EOF
 
