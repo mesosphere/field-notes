@@ -1,7 +1,5 @@
 This is a parameterized way to install Kafka in strict mode.
 
-*If using a custom zookeeper, use [kafka-custom-zk](kafka-custom-zk.md)*
-
 # Install security CLI
 ```bash
 dcos package install dcos-enterprise-cli --cli --yes
@@ -13,6 +11,11 @@ export DIRECTORY="dev-2/test"
 export NAME="kafka-4"
 export PACKAGE_NAME="kafka"
 export PACKAGE_VERSION="2.3.0-1.1.0"
+
+export ZK_DIRECTORY="dev-2/test"
+export ZK_NAME="kafka-zookeeper-3"
+export ZK_SHORT=$(echo ${ZK_DIRECTORY}${ZK_NAME} | sed "s|/||g")
+export ZK_URI="zookeeper-0-server.${ZK_SHORT}.autoip.dcos.thisdcos.directory:1140,zookeeper-1-server.${ZK_SHORT}.autoip.dcos.thisdcos.directory:1140,zookeeper-2-server.${ZK_SHORT}.autoip.dcos.thisdcos.directory:1140"
 
 export DIRECTORY_S=$(echo ${DIRECTORY} | sed "s|/|__|g")
 export NAME_S=$(echo ${NAME} | sed "s|/|__|g")
@@ -38,6 +41,9 @@ tee ${PACKAGE_OPTIONS_FILE} <<-'EOF'
     "name": "SERVICE_NAME",
     "service_account":"SERVICE_ACCOUNT",
     "service_account_secret": "SERVICE_ACCOUNT_SECRET"    
+  },
+  "kafka": {
+    "kafka_zookeeper_uri": "ZK_URI"
   }
 }
 EOF
@@ -45,6 +51,7 @@ EOF
 sed -i "s|SERVICE_ACCOUNT_SECRET|${SERVICE_ACCOUNT_SECRET}|g" ${PACKAGE_OPTIONS_FILE}
 sed -i "s|SERVICE_ACCOUNT|${SERVICE_ACCOUNT}|g" ${PACKAGE_OPTIONS_FILE}
 sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PACKAGE_OPTIONS_FILE}
+sed -i "s|ZK_URI|${ZK_URI}|g" ${PACKAGE_OPTIONS_FILE}
 
 # These may not all be necessary, but it does work.
 tee ${PERMISSION_LIST_FILE} <<-'EOF'
