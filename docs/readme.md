@@ -47,4 +47,4 @@ This is an unofficial document, put together by members of the DC/OS community, 
 * Useful Links:
     * [DC/OS on Calico](https://github.com/jrx/dcos-calico) - Courtesy of [Jan Repnak](https://github.com/jrx) at Mesosphere
 
-<!-- Any changes made here here should also be made in index.md -->
+<!-- Any changes made here here should also be made in both index.md and readme.md -->
