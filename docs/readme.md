@@ -31,6 +31,13 @@ This is an unofficial document, put together by members of the DC/OS community, 
     * [Spark Env Setup](spark/env.md)
 
 
+* Strict Mode
+    * Kafka:
+       * [kafka in Strict Mode](strict/kafka.md)
+       * [kafka-zookeeper in Strict Mode](strict/kafka-zookeeper.md)
+       * [kafka w/ custom zookeeper in Strict Mode](strict/kafka-custom-zk.md)
+    * **WIP** [Permissions Examples](strict/permissions.md)
+
 * Other
     * [Multi-Tenant Resource Isolation](docs/multitenant-resource-isolation.md)
     * [Migrating Masters to New IPs](docs/master-replacement.md)
