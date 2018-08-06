@@ -1,4 +1,4 @@
-This is a parameterized way to install Kafka in strict mode, using a custom zookeeper.
+This is a parameterized way to install Kafka in strict mode, using a [custom zookeeper](kafka-zookeeper.md).
 
 *If not using a custom zookeeper, use [kafka](kafka.md)*
 
