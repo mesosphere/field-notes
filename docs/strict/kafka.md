@@ -42,7 +42,7 @@ tee ${PACKAGE_OPTIONS_FILE} <<-'EOF'
   "service": {
     "name": "SERVICE_NAME",
     "service_account":"PRINCIPAL",
-    "service_account_secret": "SERVICE_ACCOUNT_SECRET"    
+    "service_account_secret": "SERVICE_ACCOUNT_SECRET"
   }
 }
 EOF
