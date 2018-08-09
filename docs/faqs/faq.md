@@ -264,18 +264,18 @@ sudo rm /var/lib/mesos/slave/meta/slaves/latest
 ```
 
 ## What is the format used to specify constraints in SDK frameworks?
-SDK frameworks (Kafka, Elastic, Cassandra, Datastax Enterprise, Confluent Kafka, HDFS, Edge-LB, and others) support the same types of node placement constraints as Marathon does, but the format is slightly different.  Everything should be a flat string, with elements of a constraint separated by colons (`:`) and separate constraints separated by semicolons (`;`).  If you have multiple constraints, all constraints must be met for a pod to be placed on a node.
+SDK frameworks (Kafka, Elastic, Cassandra, Datastax Enterprise, Confluent Kafka, HDFS, Edge-LB, and others) support the same types of node placement constraints as Marathon does, but the format is slightly different.  Everything should be a flat string, with elements of a constraint separated by colons (`:`) and separate constraints separated by commas (`,`).  If you have multiple constraints, all constraints must be met for a pod to be placed on a node.
 
 For example, one of these is often the default constraint (you should generally keep this, unless you have a specific reason to remove it):
-`hostname:UNIQUE`
-`hostname:MAX_PER:1`
+* `hostname:UNIQUE`
+* `hostname:MAX_PER:1`
 
 If you wanted to add an additional LIKE constraint, using a REGEX:
-`hostname:UNIQUE;hostname,LIKE:10.0.0.[35|36|37]`
-`hostname:MAX_PER:1,type:LIKE:persistent`
+* `hostname:UNIQUE;hostname,LIKE:10.0.0.[35|36|37]`
+* `hostname:MAX_PER:1,type:LIKE:persistent`
 
 If you wanted a third constraint:
-`hostname:UNIQUE;hostname,LIKE:10.0.0.[35|36|37],type:LIKE:baremetal`
+* `hostname:UNIQUE;hostname,LIKE:10.0.0.[35|36|37],type:LIKE:baremetal`
 
 
 
