@@ -9,8 +9,12 @@ dcos package install dcos-enterprise-cli --cli --yes
 
 # Create key and service account
 ```bash
+#!/bin/bash
+
 # Do not specify a leading slash ('/')
-export SERVICE_NAME="dev-2/path-to/kafka-czk-4"
+export SERVICE_NAME="kafka"
+# Alternate placement example:
+# export SERVICE_NAME="dev-stage/path/kafka-with-custom-zookeeper"
 export PACKAGE_NAME="kafka"
 export PACKAGE_VERSION="2.3.0-1.1.0"
 

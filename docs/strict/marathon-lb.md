@@ -7,8 +7,11 @@ dcos package install dcos-enterprise-cli --cli --yes
 
 # Create key and service account
 ```bash
+#!/bin/bash
+
 ## Do not specify a leading slash ('/')
-export SERVICE_NAME="hello/to/marathon-lb-2"
+export SERVICE_NAME="marathon-lb"
+# export SERVICE_NAME="prod-app/stage/marathon-lb"
 export PACKAGE_NAME="marathon-lb"
 export PACKAGE_VERSION="1.12.2"
 
