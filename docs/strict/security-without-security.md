@@ -46,9 +46,7 @@ openssl rsa -in ${PRIVATE_KEY_FILE} -pubout -out ${PUBLIC_KEY_FILE}
 ## These are new
 export SERVICE_ACCOUNT=${PRINCIPAL}
 
-sed 's|$|\\n|g' pub.pem | tr -d '\n' > ${PUBLIC_KEY_FILE}.flat
-
-tee ${PRINCIPAL}-service-account.json <<-'EOF'
+tee ${SERVICE_ACCOUNT}-service-account.json <<-'EOF'
 {
   "description": "service account `SERVICE_ACCOUNT`",
   "public_key": "PUBLIC_KEY"
@@ -56,15 +54,15 @@ tee ${PRINCIPAL}-service-account.json <<-'EOF'
 EOF
 
 # The public key must have escaped endlines
-sed -i "s|SERVICE_ACCOUNT|${SERVICE_ACCOUNT}|g" ${PRINCIPAL}-service-account.json
-sed -i "s|PUBLIC_KEY|$(sed 's|$|\\\\n|g' ${PUBLIC_KEY_FILE} | tr -d '\n')|g" ${PRINCIPAL}-service-account.json
+sed -i "s|SERVICE_ACCOUNT|${SERVICE_ACCOUNT}|g" ${SERVICE_ACCOUNT}-service-account.json
+sed -i "s|PUBLIC_KEY|$(sed 's|$|\\\\n|g' ${PUBLIC_KEY_FILE} | tr -d '\n')|g" ${SERVICE_ACCOUNT}-service-account.json
 
 # Create service account
 curl -sk https://${MASTER_IP}/acs/api/v1/users/${SERVICE_ACCOUNT} \
     -X PUT \
     -H "authorization: token=${TOKEN}" \
     -H 'content-type:application/json' \
-    -d @${PRINCIPAL}-service-account.json
+    -d @${SERVICE_ACCOUNT}-service-account.json
 
 ##############################################################################################
 ##### Create service account secret (with private key)
@@ -75,10 +73,10 @@ curl -sk https://${MASTER_IP}/acs/api/v1/users/${SERVICE_ACCOUNT} \
 # export PRIVATE_KEY_FILE=${PRINCIPAL}-private.pem
 # export TOKEN=$(cat token)
 # export MASTER_IP=10.10.0.65
+# export SERVICE_ACCOUNT=${PRINCIPAL}
 
 ## These are new
 export SERVICE_NAME="marathon-lb"
-export USERID=${PRINCIPAL}
 export SERVICE_ACCOUNT_SECRET="${SERVICE_NAME}/sa"
 
 tee ${PRINCIPAL}-secret.json <<-'EOF'
@@ -86,12 +84,12 @@ tee ${PRINCIPAL}-secret.json <<-'EOF'
 "login_endpoint":"https://leader.mesos/acs/api/v1/auth/login",
 "private_key":"PRIVATE_KEY",
 "scheme":"RS256",
-"uid":"USERID"
+"uid":"SERVICE_ACCOUNT"
 }
 EOF
 
 # This is the contents ('value') of the secret, which is JSON-formatted
-sed -i "s|USERID|${USERID}|g" ${PRINCIPAL}-secret.json
+sed -i "s|SERVICE_ACCOUNT|${SERVICE_ACCOUNT}|g" ${PRINCIPAL}-secret.json
 sed -i "s|PRIVATE_KEY|$(sed 's|$|\\\\n|g' ${PRIVATE_KEY_FILE} | tr -d '\n')|g" ${PRINCIPAL}-secret.json
 
 # This is the full secret, which is JSON formatted, and has the escaped JSON-formatted secret as a value
