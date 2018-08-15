@@ -6,7 +6,7 @@
 #### Get token (and write it to file 'token')
 export MASTER_IP=10.10.0.65
 export USERNAME=admin
-export PASSWORD=thisismypassword
+export PASSWORD=password
 echo '{"uid": "USERNAME", "password": "PASSWORD"}' > login_request.json
 sed -i "s/USERNAME/${USERNAME}/" login_request.json
 sed -i "s/PASSWORD/${PASSWORD}/" login_request.json
@@ -28,10 +28,10 @@ export TOKEN=$(cat token)
 ##### dcos security org service-accounts keypair ${PRINCIPAL}-private.pem ${PRINCIPAL}-public.pem
 export PRINCIPAL="marathon-lb"
 
-export private_keyfile="${PRINCIPAL}-private.pem"
-export public_keyfile="${PRINCIPAL}-public.pem"
-openssl genrsa -out ${private_keyfile} 2048
-openssl rsa -in ${private_keyfile} -pubout -out ${public_keyfile}
+export PRIVATE_KEY_FILE="${PRINCIPAL}-private.pem"
+export PUBLIC_KEY_FILE="${PRINCIPAL}-public.pem"
+openssl genrsa -out ${PRIVATE_KEY_FILE} 2048
+openssl rsa -in ${PRIVATE_KEY_FILE} -pubout -out ${PUBLIC_KEY_FILE}
 
 ##############################################################################################
 ##### Create service account (with public key)
@@ -39,14 +39,14 @@ openssl rsa -in ${private_keyfile} -pubout -out ${public_keyfile}
 
 ## These are already set from above
 # export PRINCIPAL="marathon-lb"
-# export public_keyfile="${PRINCIPAL}-public.pem"
+# export PUBLIC_KEY_FILE="${PRINCIPAL}-public.pem"
 # export TOKEN=$(cat token)
 # export MASTER_IP=10.10.0.65
 
 ## These are new
 export SERVICE_ACCOUNT=${PRINCIPAL}
 
-sed 's|$|\\n|g' pub.pem | tr -d '\n' > ${public_keyfile}.flat
+sed 's|$|\\n|g' pub.pem | tr -d '\n' > ${PUBLIC_KEY_FILE}.flat
 
 tee ${PRINCIPAL}-service-account.json <<-'EOF'
 {
@@ -57,7 +57,7 @@ EOF
 
 # The public key must have escaped endlines
 sed -i "s|SERVICE_ACCOUNT|${SERVICE_ACCOUNT}|g" ${PRINCIPAL}-service-account.json
-sed -i "s|PUBLIC_KEY|$(sed 's|$|\\\\n|g' ${public_keyfile} | tr -d '\n')|g" ${PRINCIPAL}-service-account.json
+sed -i "s|PUBLIC_KEY|$(sed 's|$|\\\\n|g' ${PUBLIC_KEY_FILE} | tr -d '\n')|g" ${PRINCIPAL}-service-account.json
 
 # Create service account
 curl -sk https://${MASTER_IP}/acs/api/v1/users/${SERVICE_ACCOUNT} \
@@ -72,7 +72,7 @@ curl -sk https://${MASTER_IP}/acs/api/v1/users/${SERVICE_ACCOUNT} \
 
 ## These are already set from above
 # export PRINCIPAL="marathon-lb"
-# export private_keyfile=${PRINCIPAL}-private.pem
+# export PRIVATE_KEY_FILE=${PRINCIPAL}-private.pem
 # export TOKEN=$(cat token)
 # export MASTER_IP=10.10.0.65
 
@@ -92,7 +92,7 @@ EOF
 
 # This is the contents ('value') of the secret, which is JSON-formatted
 sed -i "s|USERID|${USERID}|g" ${PRINCIPAL}-secret.json
-sed -i "s|PRIVATE_KEY|$(sed 's|$|\\\\n|g' ${private_keyfile} | tr -d '\n')|g" ${PRINCIPAL}-secret.json
+sed -i "s|PRIVATE_KEY|$(sed 's|$|\\\\n|g' ${PRIVATE_KEY_FILE} | tr -d '\n')|g" ${PRINCIPAL}-secret.json
 
 # This is the full secret, which is JSON formatted, and has the escaped JSON-formatted secret as a value
 echo -n '{"value": "' > ${PRINCIPAL}-secret.json.json
