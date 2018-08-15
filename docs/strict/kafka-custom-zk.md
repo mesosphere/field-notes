@@ -42,24 +42,6 @@ dcos security org service-accounts keypair ${PRINCIPAL}-private.pem ${PRINCIPAL}
 dcos security org service-accounts create -p ${PRINCIPAL}-public.pem ${PRINCIPAL}
 dcos security secrets create-sa-secret --strict ${PRINCIPAL}-private.pem ${PRINCIPAL} ${SERVICE_ACCOUNT_SECRET}
 
-tee ${PACKAGE_OPTIONS_FILE} <<-'EOF'
-{
-  "service": {
-    "name": "SERVICE_NAME",
-    "service_account":"PRINCIPAL",
-    "service_account_secret": "SERVICE_ACCOUNT_SECRET"
-  },
-  "kafka": {
-    "kafka_zookeeper_uri": "ZK_URI"
-  }
-}
-EOF
-
-sed -i "s|SERVICE_ACCOUNT_SECRET|${SERVICE_ACCOUNT_SECRET}|g" ${PACKAGE_OPTIONS_FILE}
-sed -i "s|PRINCIPAL|${PRINCIPAL}|g" ${PACKAGE_OPTIONS_FILE}
-sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PACKAGE_OPTIONS_FILE}
-sed -i "s|ZK_URI|${ZK_URI}|g" ${PACKAGE_OPTIONS_FILE}
-
 # These may not all be necessary, but it does work.
 # The 'role' permissions grant permission to create a reservation - need create only
 # The 'principal' permissions grant permission to delete a reservation - need delete only
@@ -78,6 +60,24 @@ sed -i "s|PRINCIPAL|${PRINCIPAL}|g" ${PERMISSION_LIST_FILE}
 while read p; do
 dcos security org users grant ${PRINCIPAL} $p
 done < ${PERMISSION_LIST_FILE}
+
+tee ${PACKAGE_OPTIONS_FILE} <<-'EOF'
+{
+  "service": {
+    "name": "SERVICE_NAME",
+    "service_account":"PRINCIPAL",
+    "service_account_secret": "SERVICE_ACCOUNT_SECRET"
+  },
+  "kafka": {
+    "kafka_zookeeper_uri": "ZK_URI"
+  }
+}
+EOF
+
+sed -i "s|SERVICE_ACCOUNT_SECRET|${SERVICE_ACCOUNT_SECRET}|g" ${PACKAGE_OPTIONS_FILE}
+sed -i "s|PRINCIPAL|${PRINCIPAL}|g" ${PACKAGE_OPTIONS_FILE}
+sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PACKAGE_OPTIONS_FILE}
+sed -i "s|ZK_URI|${ZK_URI}|g" ${PACKAGE_OPTIONS_FILE}
 
 dcos package install ${PACKAGE_NAME} --package-version=${PACKAGE_VERSION} --options=${PACKAGE_OPTIONS_FILE} --yes --app
 

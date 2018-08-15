@@ -1,5 +1,7 @@
 This is a parameterized way to install Marathon-LB in strict mode.
 
+
+
 # Install security CLI
 ```bash
 dcos package install dcos-enterprise-cli --cli --yes
@@ -11,6 +13,7 @@ dcos package install dcos-enterprise-cli --cli --yes
 
 ## Do not specify a leading slash ('/')
 export SERVICE_NAME="marathon-lb"
+# Alternate placement example:
 # export SERVICE_NAME="prod-app/stage/marathon-lb"
 export PACKAGE_NAME="marathon-lb"
 export PACKAGE_VERSION="1.12.2"
@@ -32,6 +35,18 @@ dcos security org service-accounts keypair ${PRINCIPAL}-private.pem ${PRINCIPAL}
 dcos security org service-accounts create -p ${PRINCIPAL}-public.pem ${PRINCIPAL}
 dcos security secrets create-sa-secret --strict ${PRINCIPAL}-private.pem ${PRINCIPAL} ${SERVICE_ACCOUNT_SECRET}
 
+## Create permissions file
+tee ${PERMISSION_LIST_FILE} <<-'EOF'
+dcos:service:marathon:marathon:services:MARATHON_LOCATION read
+dcos:service:marathon:marathon:admin:events read
+EOF
+
+## Add permissions
+sed -i "s|MARATHON_LOCATION|${MARATHON_LOCATION}|g" ${PERMISSION_LIST_FILE}
+while read p; do
+dcos security org users grant ${PRINCIPAL} $p
+done < ${PERMISSION_LIST_FILE}
+
 ## Create options file
 tee ${PACKAGE_OPTIONS_FILE} <<-'EOF'
 {
@@ -48,17 +63,6 @@ sed -i "s|SERVICE_ACCOUNT_SECRET|${SERVICE_ACCOUNT_SECRET}|g" ${PACKAGE_OPTIONS_
 sed -i "s|HAPROXY_GROUP|${HAPROXY_GROUP}|g" ${PACKAGE_OPTIONS_FILE}
 sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PACKAGE_OPTIONS_FILE}
 
-## Create permissions file
-tee ${PERMISSION_LIST_FILE} <<-'EOF'
-dcos:service:marathon:marathon:services:MARATHON_LOCATION read
-dcos:service:marathon:marathon:admin:events read
-EOF
-
-## Add permissions
-sed -i "s|MARATHON_LOCATION|${MARATHON_LOCATION}|g" ${PERMISSION_LIST_FILE}
-while read p; do
-dcos security org users grant ${PRINCIPAL} $p
-done < ${PERMISSION_LIST_FILE}
-
+## Install
 dcos package install ${PACKAGE_NAME} --package-version=${PACKAGE_VERSION} --options=${PACKAGE_OPTIONS_FILE} --yes --app
 ```
