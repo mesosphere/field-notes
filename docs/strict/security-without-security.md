@@ -110,7 +110,7 @@ curl -sk https://${MASTER_IP}/secrets/v1/secret/default/${SERVICE_ACCOUNT_SECRET
 
 ## These are already set from above
 # export PRINCIPAL="marathon-lb"
-# export USERID=${PRINCIPAL}
+# export SERVICE_ACCOUNT=${PRINCIPAL}
 # export TOKEN=$(cat token)
 # export MASTER_IP=10.10.0.65
 
@@ -140,7 +140,7 @@ curl -sk https://${MASTER_IP}/acs/api/v1/acls/${ESCAPED_PERMISSION_ID} \
     -d @${FLAT_PERMISSION_ID}.json
 
 # Grant the permission/action to the user
-curl -sk https://${MASTER_IP}/acs/api/v1/acls/${ESCAPED_PERMISSION_ID}/users/${USERID}/${PERMISSION_ACTION} \
+curl -sk https://${MASTER_IP}/acs/api/v1/acls/${ESCAPED_PERMISSION_ID}/users/${SERVICE_ACCOUNT}/${PERMISSION_ACTION} \
     -X PUT \
     -H "authorization: token=${TOKEN}" \
     -H 'content-type:application/json' \
