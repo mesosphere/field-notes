@@ -33,9 +33,12 @@ Storage Driver: overlay
 *(Note: `Supports d_type: true`)*
 
 #### Cluster Size
+You **must** have an odd number of masters.
 Any production cluster **must** have at least five masters.
 Any non-production cluster **must** have at least 3 masters.
 The only acceptable cluster with 1 master is a local test cluster.
+
+If you have masters spread across multiple locations (zones, buildings, racks, etc.), they **must** be spread across at least three locations.  If you cannot provision three locations, it is preferable to have one zone vs. two zones.
 
 #### NTP or Chrony
 NTP or Chrony **must** be properly configured, and **must** be properly working, with valid reachable NTP servers.  They should preferably be designated with IP addresses, not DNS names.
@@ -51,7 +54,7 @@ Also, ideally, use some CI to deploy DC/OS.
 ## Important Best Practices
 
 #### Docker version
-Use Docker 17.06.2 for DC/OS.
+Use Docker 17.06.2 or 17.12 for DC/OS.
 
 #### Automation
 Use service accounts for authenticating against DC/OS from any automation (aside from one-time automation such as deployment).
