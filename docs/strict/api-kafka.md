@@ -6,7 +6,6 @@ This is a parameterized way to install Kafka in strict mode without the `dcos se
 ###### Customize environment here 
 # Do not specify a leading slash ('/')
 export SERVICE_NAME="kafka"
-# Alternate placement example:
 # export SERVICE_NAME="dev-stage/path/custom-kafka"
 
 export PACKAGE_NAME="kafka"

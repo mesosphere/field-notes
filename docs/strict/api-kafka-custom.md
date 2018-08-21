@@ -9,8 +9,8 @@ This is a parameterized way to install Kafka in strict mode, using a [custom zoo
 ###### Customize environment here 
 # Do not specify a leading slash ('/')
 export SERVICE_NAME="kafka"
-# Alternate placement example:
 # export SERVICE_NAME="dev-stage/path/kafka-with-custom-zookeeper"
+
 export PACKAGE_NAME="kafka"
 export PACKAGE_VERSION="2.3.0-1.1.0"
 

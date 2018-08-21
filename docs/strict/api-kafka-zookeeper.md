@@ -9,8 +9,8 @@ This is a parameterized way to install Kafka-Zookeeper in strict mode without th
 ###### Customize environment here 
 # Do not specify a leading slash ('/')
 export SERVICE_NAME="kafka-zookeeper"
-# Alternate placement example:
 # export SERVICE_NAME="dev-stage/path/kafka-zookeeper"
+
 export PACKAGE_NAME="kafka-zookeeper"
 export PACKAGE_VERSION="2.2.0-3.4.11"
 
@@ -44,6 +44,7 @@ rm token
 
 ##############################################################################################
 ###### Env variables based on customizations
+
 # You can call the principal anything, but it makes the permissions harder; the principal must match the service account name for reservation deletion.
 # principal is SERVICE_NAME with slashes replaced with '__'
 export SERVICE_ACCOUNT=$(echo ${SERVICE_NAME} | sed "s|/|__|g")
