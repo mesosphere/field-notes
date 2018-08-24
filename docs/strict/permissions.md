@@ -108,17 +108,28 @@ There are three types of permissions that can be granted:
     * Note that this will grant the ability to get a list of secrets, but will not grant the ability create, view, update, or delete those secrets.  These are governed by the next permission.
 * `dcos:secrets:default:<path> <action>` grants permissions to actually create/read/update/delete secrets in a given path.  This has the following caveats:
   * `<path>` needs a leading slash, and supports wildcards '*" at the end of the path.  For example:
-    * `dcos:secrets:default:/tenant/secretname <action>` will grant permissions (C/R/U/D) to modify the secret called `/tenant/secretname`
+    * `dcos:secrets:default:/tenant/secretname <action>` will grant permissions (C/R/U/D) on the secret called `/tenant/secretname`
+    * `dcos:secrets:default:/tenant/* <action>` will grant permissions (C/R/U/D) on any secret in the path of `/tenant/*`
+  * The API / CLI actions behave as follows:
+    * In order to `create`, `read`, `update`, or `delete` a given secret, you need the corresponding action.
+  * The UI has some limitations around actions:
+    * In order to `read` or `update` **any** secret _through the UI_, you need `dcos:superuser full`.  This is a current limitation of the UI.
+    * In order to `delete` or `create` a secret through the UI, you need the corresponding `create`/`delete` permission
 
+So, given the above, these are some potential sets of permissions that could be granted, and how they behave:
 
+## CLI/API: Full access to secrets in /tenant/*.  UI: No access.
 ```
 dcos:adminrouter:secrets full
-dcos:secrets:default:/tenant/* read
-dcos:secrets:default:/tenant/* create
-dcos:secrets:default:/tenant/* update
-dcos:secrets:default:/tenant/* delete
-dcos:secrets:default:/tenant/* full
 dcos:secrets:list:default:/tenant read
+dcos:secrets:default:/tenant/* full
+```
+
+## CLI/API: Full access to secrets in /tenant/*.  UI: list *all* secrets in the system, add/delete secrets in /tenant/*.
+```
+dcos:adminrouter:secrets full
+dcos:secrets:list:default:/ read
+dcos:secrets:default:/tenant/* full
 ```
 
 
