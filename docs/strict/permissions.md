@@ -118,7 +118,7 @@ There are three types of permissions that can be granted:
 
 So, given the above, these are some potential sets of permissions that could be granted, and how they behave:
 
-## CLI/API Only
+### CLI/API Only
 * Full access to secrets in `/tenant/*`
 * UI: No access
 ```
@@ -127,7 +127,7 @@ dcos:secrets:list:default:/tenant read
 dcos:secrets:default:/tenant/* full
 ```
 
-## CLI/API: 
+### CLI/API: 
 * Full access to secrets in `/tenant/*`
 * UI: list *all* secrets in the system, `create`/`delete` secrets in `/tenant/*`
 ```
