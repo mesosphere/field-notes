@@ -129,8 +129,8 @@ dcos:secrets:default:/tenant/* full
 
 ### CLI/API: 
 * CLI/API: Full access to secrets in `/tenant/*`
-* CLI/API: List all secrets in the system
-* UI: list **all** secrets in the system, `create`/`delete` secrets in `/tenant/*`
+* CLI/API: List **all** secrets in the system
+* UI: List **all** secrets in the system, `create`/`delete` secrets in `/tenant/*`
 ```
 dcos:adminrouter:secrets full
 dcos:secrets:list:default:/ read
