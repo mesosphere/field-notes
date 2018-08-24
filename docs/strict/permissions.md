@@ -88,6 +88,39 @@ dcos:secrets:list:default:/ read
 dcos:secrets:default:/* read
 ```
 
+# Permissions for Secrets (1.11.4)
+The UI/UX around secrets for DC/OS 1.11.4 does not yet fully support fine-grained permissions.  
+
+There are three types of permissions that can be granted:
+* `dcos:adminrouter:secrets full` grants access to the secrets endpoint, which is necessary for any interaction with secrets
+* `dcos:secrets:list:default:<some-path>` grants access to **list** a given set of secrets.  This has the following caveats:
+  * `full` and `read` have the same behavior.
+  * There **should** be a leading slash.  For example, `/tenant`
+  * There **should not be** an asterisk.
+  * Using the CLI, you will **only** be able to do a list on the granted paths.  For example:
+    * User X has `dcos:secrets:list:default:/tenant read`
+    * User X will receive an error for `dcos security secrets list /`
+    * User X will receive a list of secrets for `dcos security secrets list /tenant`
+    * There is no simple command to get a list of all secrets a given user has access to.  You must make individual queries for individual paths.
+  * Using the UI, this is an all or nothing situation - you can either grant access to see a list of all secrets, or none at all.  Specifically:
+    * If a user has `dcos:secrets:list:default:/ read` (or `update`), they will be able to see a list of all secrets in the system.
+    * If they do not, the secrets UI will not display anything, regardless of what other secrets permissions they have
+    * Note that this will grant the ability to get a list of secrets, but will not grant the ability create, view, update, or delete those secrets.  These are governed by the next permission.
+* `dcos:secrets:default:<path> <action>` grants permissions to actually create/read/update/delete secrets in a given path.  This has the following caveats:
+  * `<path>` needs a leading slash, and supports wildcards '*" at the end of the path.  For example:
+    * `dcos:secrets:default:/tenant/secretname <action>` will grant permissions (C/R/U/D) to modify the secret called `/tenant/secretname`
+
+
+```
+dcos:adminrouter:secrets full
+dcos:secrets:default:/tenant/* read
+dcos:secrets:default:/tenant/* create
+dcos:secrets:default:/tenant/* update
+dcos:secrets:default:/tenant/* delete
+dcos:secrets:default:/tenant/* full
+dcos:secrets:list:default:/tenant read
+```
+
 
 # Group-specific Full Permissions
 ```
