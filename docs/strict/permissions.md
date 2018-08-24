@@ -118,14 +118,18 @@ There are three types of permissions that can be granted:
 
 So, given the above, these are some potential sets of permissions that could be granted, and how they behave:
 
-## CLI/API: Full access to secrets in /tenant/*.  UI: No access.
+## CLI/API Only
+* Full access to secrets in `/tenant/*`
+* UI: No access
 ```
 dcos:adminrouter:secrets full
 dcos:secrets:list:default:/tenant read
 dcos:secrets:default:/tenant/* full
 ```
 
-## CLI/API: Full access to secrets in /tenant/*.  UI: list *all* secrets in the system, add/delete secrets in /tenant/*.
+## CLI/API: 
+* Full access to secrets in `/tenant/*`
+* UI: list *all* secrets in the system, `create`/`delete` secrets in `/tenant/*`
 ```
 dcos:adminrouter:secrets full
 dcos:secrets:list:default:/ read
