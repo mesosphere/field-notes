@@ -143,15 +143,15 @@ sed -i "s|SERVICE_ACCOUNT|${SERVICE_ACCOUNT}|g" ${SERVICE_ACCOUNT_JSON}
 sed -i "s|PUBLIC_KEY|$(sed 's|$|\\\\n|g' ${PUBLIC_KEY_FILE} | tr -d '\n')|g" ${SERVICE_ACCOUNT_JSON}
 
 echo "Creating service account with name ${SERVICE_ACCOUNT}"
-# Create the account with a PUT
+## If we get an error creating the service account, it may already exist; bail out cause we don't want to touch it.
 curl -fsk https://${MASTER_IP}/acs/api/v1/users/${SERVICE_ACCOUNT} \
     -X PUT \
     -H "authorization: token=${TOKEN}" \
     -H 'content-type:application/json' \
     -d @${SERVICE_ACCOUNT_JSON} 2>/dev/null \
-    || (echo "Service account already exists, bailing..." \
-    && rm ${PRIVATE_KEY_FILE} ${PUBLIC_KEY_FILE} ${SERVICE_ACCOUNT_JSON} \
-    && exit 1)
+    || (echo "Service account cannot be created or already exists, bailing..." \
+        && rm ${PRIVATE_KEY_FILE} ${PUBLIC_KEY_FILE} ${SERVICE_ACCOUNT_JSON} \
+        && exit 1)
 
 # exit 0
 
@@ -178,14 +178,15 @@ sed 's|\\|\\\\|g' ${SERVICE_ACCOUNT_SECRET_JSON} | sed 's|"|\\"|g' | tr -d '\n' 
 echo '"}' >> ${SERVICE_ACCOUNT_SECRET_FULL_JSON}
 
 echo "Creating service account secret with name ${SERVICE_ACCOUNT_SECRET}"
-# Create the secret
+## If we get an error creating the service account secret, it may already exist; bail out cause we don't want to touch it.
 curl -fsk https://${MASTER_IP}/secrets/v1/secret/default/${SERVICE_ACCOUNT_SECRET} \
     -X PUT \
     -H "authorization: token=${TOKEN}" \
     -H 'content-type:application/json' \
-    -d @${SERVICE_ACCOUNT_SECRET_FULL_JSON} || (echo "Service account secret already exists, bailing..." \
-    && rm ${PRIVATE_KEY_FILE} ${PUBLIC_KEY_FILE} ${SERVICE_ACCOUNT_JSON} ${SERVICE_ACCOUNT_SECRET_FULL_JSON} ${SERVICE_ACCOUNT_SECRET_JSON} \
-    && exit 1)
+    -d @${SERVICE_ACCOUNT_SECRET_FULL_JSON} \
+    || (echo "Service account secret cannot be created or already exists, bailing..." \
+        && rm ${PRIVATE_KEY_FILE} ${PUBLIC_KEY_FILE} ${SERVICE_ACCOUNT_JSON} ${SERVICE_ACCOUNT_SECRET_FULL_JSON} ${SERVICE_ACCOUNT_SECRET_JSON} \
+        && exit 1)
 
 ##############################################################################################
 # Create list of permissions
@@ -217,6 +218,8 @@ while read p; do
   
   sed -i "s|PERMISSION_ID|${PERMISSION_ID}|g" ${FLAT_PERMISSION_ID}.json
 
+  # It is acceptable for the rid to already exist; if it does, we'll get a 409, which gets ignored.
+  # Note that we don't bail out on other failures; this should be added later
   echo "Creating permission with rid of '${ESCAPED_PERMISSION_ID}'"
   curl -sk https://${MASTER_IP}/acs/api/v1/acls/${ESCAPED_PERMISSION_ID} \
       -X PUT \
@@ -224,7 +227,8 @@ while read p; do
       -H 'content-type:application/json' \
       -d @${FLAT_PERMISSION_ID}.json 2>&1 | grep -v 409 || true
 
-  # Grant the permission/action to the user
+  # It is acceptable for the permission to already be granted; if it does, we'll get a 409, which gets ignored.
+  # Note that we don't bail out on other failures; this should be added later
   echo "Granting '${PERMISSION_ACTION}' on rid '${ESCAPED_PERMISSION_ID}' to '${SERVICE_ACCOUNT}'"
   curl -sk https://${MASTER_IP}/acs/api/v1/acls/${ESCAPED_PERMISSION_ID}/users/${SERVICE_ACCOUNT}/${PERMISSION_ACTION} \
       -X PUT \
