@@ -45,7 +45,7 @@ nobody:x:65534:65534:nobody:/:/sbin/nologin
   * If your images and marathon apps have no specified user, there's minimal behavior change from permissive to strict; just be aware that fetched files may have an unexpected uid (whatever uid is `nobody` on the host filesystem)
   * Not unique to strict, but if you're mounting volumes into the container, ensure that your process uid has permissions to perform actions on those volumes.
 
-## Mesos runtime:
+## Mesos runtime (in strict):
 * Process user:
   * If a user is specified in the Marathon app, then Mesos will do a userid lookup or that user on the **host** `/etc/passwd` and use that for the container process, *even if that userid does not exist in the container*.  Additionally, you'll need to add the permission `dcos:mesos:master:task:user:<username> create` to the `dcos_marathon` service account.
     * E.g., If the Marathon app has `.user: centos` without the necessary permission added to `dcos_marathon`, the process will fail to start.
