@@ -4,7 +4,8 @@ set -e
 if [[ "$#" -lt 2 ]]; then
     echo "Not enough arguments."
     echo "Usage: './api-service-account.sh <service-name> <master-ip> -u <usernmae> -p <password>'"
-    echo "Usage: './api-service-account.sh <service-name> <master-ip> -t <dcos-auth-token>'"
+    echo "Alternate usage: './api-service-account.sh <service-name> <master-ip> -t <dcos-auth-token>'"
+    echo ""
     echo "For example: './api-service-account.sh path/to/kafka 10.10.10.10 -u admin -p password' will create the following:"
     echo "  A private/public RSA key pair"
     echo "  A service account with the name 'path__to__kafka' (note: no leading slash, all other slashes replaced with '__'.  Dashes are unaffected).  The public key for the service account comes from above"
