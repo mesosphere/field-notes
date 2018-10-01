@@ -3,7 +3,32 @@ set -e
 
 if [[ "$#" -lt 2 ]]; then
     echo "Not enough arguments."
-    # print_help
+    echo "Usage: './api-service-account.sh <service-name> <master-ip> -u <usernmae> -p <password>'"
+    echo "Usage: './api-service-account.sh <service-name> <master-ip> -t <dcos-auth-token>'"
+    echo "For example: './api-service-account.sh path/to/kafka 10.10.10.10 -u admin -p password' will create the following:"
+    echo "  A private/public RSA key pair"
+    echo "  A service account with the name 'path__to__kafka' (note: no leading slash, all other slashes replaced with '__'.  Dashes are unaffected).  The public key for the service account comes from above"
+    echo "  The service account name is also used as the Mesos principal for this framework"
+    echo "  The private key, stored as JSON (along with other metadata, including service account name), stored at secret 'path/to/kafka/sa' (note: nested right under the path of the service name, at '<service-name>/sa')"
+    echo "  This set of permissions:
+
+                    dcos:mesos:master:framework:role:path__to__kafka-role       create
+                    ^ The ability to create/start a framework using Mesos role 'path__to__kafka-role' (the service account name with '-role' appended)
+
+                    dcos:mesos:master:reservation:role:path__to__kafka-role     create
+                    ^ The ability to create a reservations using Mesos role 'path__to__kafka-role' (the service account name with '-role' appended)
+
+                    dcos:mesos:master:volume:role:path__to__kafka-role          create
+                    ^ The ability to create Mesos volumes using Mesos role 'path__to__kafka-role' (the service account name with '-role' appended)
+
+                    dcos:mesos:master:task:user:nobody                  create
+                    ^ The ability for the framework to start Mesos tasks using the Linux user 'nobody'
+
+                    dcos:mesos:master:reservation:principal:path__to__kafka   delete
+                    ^ The ability to delete reservations created by the principal 'path__to__kafka'
+
+                    dcos:mesos:master:volume:principal:path__to__kafka        delete
+                    ^ The ability to delete Mesos volumes created by the principal 'path__to__kafka'"
     exit 1
 fi
 
