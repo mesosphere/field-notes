@@ -292,5 +292,5 @@ rm ${SERVICE_ACCOUNT_JSON}
 rm ${SERVICE_ACCOUNT_SECRET_JSON}
 rm ${SERVICE_ACCOUNT_SECRET_FULL_JSON}
 
-echo "For service named '${SERVICE_NAME}', created service account '${SERVICE_ACCOUNT}' , with service account secret available at ${SERVICE_ACCOUNT_SECRET}"
+echo "For service named '${SERVICE_NAME}', created service account '${SERVICE_ACCOUNT}' , with service account secret available at '${SERVICE_ACCOUNT_SECRET}''"
 exit 0
