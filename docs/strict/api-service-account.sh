@@ -29,7 +29,20 @@ if [[ "$#" -lt 2 ]]; then
                     ^ The ability to delete reservations created by the principal 'path__to__kafka'
 
                     dcos:mesos:master:volume:principal:path__to__kafka        delete
-                    ^ The ability to delete Mesos volumes created by the principal 'path__to__kafka'"
+                    ^ The ability to delete Mesos volumes created by the principal 'path__to__kafka'
+                    
+                    dcos:secrets:default:/path/to/kafka/* full
+                    ^ The ability to create and read secrets nested uner /path/to/kafka
+                    
+                    dcos:secrets:list:default:/path/to/kafka read
+                    ^ The ability to get a list of secrets nested under /path/to/kafka
+                    
+                    dcos:adminrouter:ops:ca:rw full
+                    ^ The ability to generate certificates using the DC/OS CA                    
+                    
+                    dcos:adminrouter:ops:ca:ro full
+                    ^ The ability to read CA information"
+                    
     exit 1
 fi
 
@@ -220,16 +233,21 @@ curl -fsk https://${MASTER_IP}/secrets/v1/secret/default/${SERVICE_ACCOUNT_SECRE
 # The 'role' permissions grant permission to create a reservation - need create only
 # The 'principal' permissions grant permission to delete a reservation - need delete only
 tee ${PERMISSION_LIST_FILE} > /dev/null <<-'EOF'
-dcos:mesos:master:framework:role:SERVICE_ROLE       create
-dcos:mesos:master:reservation:role:SERVICE_ROLE     create
-dcos:mesos:master:volume:role:SERVICE_ROLE          create
-dcos:mesos:master:task:user:nobody                  create
+dcos:mesos:master:framework:role:SERVICE_ROLE             create
+dcos:mesos:master:reservation:role:SERVICE_ROLE           create
+dcos:mesos:master:volume:role:SERVICE_ROLE                create
+dcos:mesos:master:task:user:nobody                        create
 dcos:mesos:master:reservation:principal:SERVICE_ACCOUNT   delete
 dcos:mesos:master:volume:principal:SERVICE_ACCOUNT        delete
+dcos:secrets:default:/SERVICE_NAME/*                      full
+dcos:secrets:list:default:/SERVICE_NAME                   read
+dcos:adminrouter:ops:ca:rw                                full
+dcos:adminrouter:ops:ca:ro                                full
 EOF
 
 sed -i "s|SERVICE_ROLE|${SERVICE_ROLE}|g" ${PERMISSION_LIST_FILE}
 sed -i "s|SERVICE_ACCOUNT|${SERVICE_ACCOUNT}|g" ${PERMISSION_LIST_FILE}
+sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PERMISSION_LIST_FILE}
 
 ##############################################################################################
 ## Grant permissions
