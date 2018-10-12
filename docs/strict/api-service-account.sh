@@ -163,7 +163,8 @@ export SERVICE_ACCOUNT_SECRET_FULL_JSON="${SERVICE_ACCOUNT}-secret_${TS}.json.js
 ## Create service account private / public key pair
 # dcos security org service-accounts keypair ${SERVICE_ACCOUNT}-private.pem ${SERVICE_ACCOUNT}-public.pem
 echo "Generating service account private/public key pair"
-openssl genrsa -out ${PRIVATE_KEY_FILE} 2048
+# openssl genrsa -out ${PRIVATE_KEY_FILE} 2048
+openssl genpkey -out ${PRIVATE_KEY_FILE} -algorithm RSA -pkeyopt rsa_keygen_bits:2048
 openssl rsa -in ${PRIVATE_KEY_FILE} -pubout -out ${PUBLIC_KEY_FILE}
 
 ##############################################################################################
