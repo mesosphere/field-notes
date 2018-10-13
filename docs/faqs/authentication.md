@@ -112,7 +112,8 @@ Alternately, you can do this with pure bash and python (to handle formatting JSO
 export MASTER_IP=10.10.0.36
 export SERVICE_ACCOUNT=sa
 
-openssl genrsa -out ${SERVICE_ACCOUNT}-private.pem
+# openssl genrsa -out ${SERVICE_ACCOUNT}-private.pem
+openssl genpkey -out ${SERVICE_ACCOUNT}-private.pem -algorithm RSA -pkeyopt rsa_keygen_bits:2048
 openssl rsa -in ${SERVICE_ACCOUNT}-private.pem -pubout -out ${SERVICE_ACCOUNT}-public.pem
 
 # Create JSON with proper structure for a service account
