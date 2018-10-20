@@ -138,8 +138,13 @@ dcos:mesos:master:volume:role:SERVICE_ROLE          create
 dcos:mesos:master:task:user:nobody                  create
 dcos:mesos:master:reservation:principal:SERVICE_ACCOUNT   delete
 dcos:mesos:master:volume:principal:SERVICE_ACCOUNT        delete
+dcos:secrets:default:/SERVICE_NAME/*                      full
+dcos:secrets:list:default:/SERVICE_NAME                   read
+dcos:adminrouter:ops:ca:rw                                full                    
+dcos:adminrouter:ops:ca:ro                                full
 EOF
 
+sed -i "s|SERVICE_NAME|${SERVICE_NAME}|g" ${PERMISSION_LIST_FILE}
 sed -i "s|SERVICE_ROLE|${SERVICE_ROLE}|g" ${PERMISSION_LIST_FILE}
 sed -i "s|SERVICE_ACCOUNT|${SERVICE_ACCOUNT}|g" ${PERMISSION_LIST_FILE}
 
@@ -181,7 +186,12 @@ tee ${PACKAGE_OPTIONS_FILE} <<-'EOF'
   "service": {
     "name": "SERVICE_NAME",
     "service_account":"SERVICE_ACCOUNT",
-    "service_account_secret": "SERVICE_ACCOUNT_SECRET"
+    "service_account_secret": "SERVICE_ACCOUNT_SECRET",
+    "security": {
+      "transport_encryption": {
+        "enabled": true
+      }
+    }
   },
   "kafka": {
     "kafka_zookeeper_uri": "ZK_URI"
