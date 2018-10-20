@@ -38,7 +38,7 @@ if [[ "$#" -lt 2 ]]; then
                     ^ The ability to get a list of secrets nested under /path/to/kafka
                     
                     dcos:adminrouter:ops:ca:rw full
-                    ^ The ability to generate certificates using the DC/OS CA                    
+                    ^ The ability to generate certificates using the DC/OS CA
                     
                     dcos:adminrouter:ops:ca:ro full
                     ^ The ability to read CA information"
