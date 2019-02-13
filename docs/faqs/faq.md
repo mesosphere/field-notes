@@ -133,9 +133,13 @@ https://github.com/dcos/dcos-cli/releases
 
 ## How come I can't use the `dcos security`, `dcos backup`, or `dcos license` command?
 
+*Note: Starting from DC/OS 1.13, these commands are installed automatically during `dcos cluster setup` or with `dcos package install dcos-enterprise-cli --cli`.*
+
 The `dcos security` command comes from the dcos-enterprise-cli Universe package, and can be installed by running `dcos package install dcos-enterprise-cli --cli`.  Note that the features of this CLI add-on will only work with the Enterprise edition of DC/OS.
 
 ## How do I install the `dcos-enterprise-cli` package in a local universe cluster?
+
+*Note: Starting from DC/OS 1.13, it is recommended to rely on the [bootstrap registry](https://docs.mesosphere.com/1.13/administering-clusters/repo/package-registry/quickstart/#remove-the-universe-repository-optional) to install `dcos-enterprise-cli`. Once you've removed the Universe repository, any CLI user will automatically get the enterprise plugin when running `dcos cluster setup` or `dcos package install dcos-enterprise-cli --cli`.*
 
 Installing packages relies on the place actually doing the installation being able to reach the local universe.  If you're following the default local universe instructions, you'll end up placing the local universe on your masters on master.mesos, and it is unlikely that the place you are running the `dcos` CLI tool from (your laptop, the bootstrap) actually knows how to resolve master.mesos.  Often, it will also be firewalled off.
 
