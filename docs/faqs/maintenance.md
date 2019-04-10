@@ -40,6 +40,8 @@ This adds the `maintenance_mode` to the list of enabled features.  Note that thi
 
 You can create this file prior to installing DC/OS (I think permissions will just kind of work, not entirely sure though).
 
+This should not be necessary in Marathon 1.7 (DC/OS 1.12.x).
+
 ## API Calls
 
 Here are some example calls to perform various actions:
