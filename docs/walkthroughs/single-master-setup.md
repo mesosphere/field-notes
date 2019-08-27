@@ -328,7 +328,7 @@ drwxrwxrwx. 67 root  root  4.0K Jun 16 15:39 packages
 Start nginx to actually host the artifacts so that your nodes can download and install from the bootstrap:
 
 ```
-sudo docker run -d -p 80:80 --name bootstrap-190 -v $PWD/genconf/serve:/usr/share/nginx.html:ro nginx
+sudo docker run -d -p 80:80 --name bootstrap-190 -v $PWD/genconf/serve:/usr/share/nginx/html:ro nginx
 ```
 
 Now, if you curl the bootstrap URL with a path of /cluster-package-info.json, you should get a JSON file that lists all of the packages that make up DC/OS:
